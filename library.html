@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE AI Hub - Prompt Library</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+        }
+        .prompt-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+        .prompt-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -2px rgb(0 0 0 / 0.07);
+        }
+        .copy-button {
+            transition: all 0.2s ease;
+        }
+        .copy-button.copied {
+            background-color: #10B981; /* Green */
+            color: #FFFFFF;
+        }
+        .filter-button {
+            transition: all 0.2s ease;
+        }
+        .filter-button.active {
+            background-color: #EC4899; /* Pink */
+            color: #FFFFFF;
+            border-color: #EC4899;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">
+                Prompt Library
+            </h1>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">
+                A curated collection of high-value prompts designed to supercharge every stage of the sales engineering workflow.
+            </p>
+        </div>
+        
+        <!-- SE Power Plays Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-10">SE Power Plays</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="prompt-card bg-white p-6 rounded-lg border-2 border-pink-500 shadow-lg">
+                     <h3 class="font-semibold text-gray-900">Champion Enablement Email</h3>
+                    <p class="text-sm text-gray-500 mt-2 flex-grow">Drafts an email for your champion to send to their boss, summarizing the value and ROI of Bob, making it easy for them to sell internally.</p>
+                    <div class="mt-4">
+                        <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Power Prompt</button>
+                        <pre class="hidden">Act as a strategic business advisor. I am the internal champion for the Bob HRIS platform at my company. My boss, the [Boss's Title, e.g., CFO], is very busy and focused on ROI.
+
+Draft a concise email for me to send to my boss that:
+1.  Briefly introduces Bob in the context of our key business initiative: [e.g., "improving employee retention"].
+2.  Summarizes the top 2-3 value propositions we discussed that directly impact our goals.
+3.  Includes the key quantitative outcomes we projected, such as [e.g., "a 15% reduction in time-to-hire" or "an estimated $50k annual savings by automating manual HR tasks"].
+4.  Proposes a clear next step, which is a brief 15-minute meeting to present the full business case for Bob.
+
+Make the email easy to read, persuasive, and focused on business outcomes, not just features.</pre>
+                    </div>
+                </div>
+                 <div class="prompt-card bg-white p-6 rounded-lg border-2 border-pink-500 shadow-lg">
+                     <h3 class="font-semibold text-gray-900">Competitive Battlecard Creator</h3>
+                    <p class="text-sm text-gray-500 mt-2 flex-grow">Provide links to a competitor's website and a G2 review page, and get back a structured battlecard highlighting Bob's strengths.</p>
+                    <div class="mt-4">
+                        <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Power Prompt</button>
+                        <pre class="hidden">You are a competitive intelligence analyst for Bob, a leading HRIS platform. I will provide you with two links: one to a competitor's homepage and one to their G2 review page.
+
+Based on the information from those links, create a concise competitive battlecard in markdown format. The battlecard must include:
+1.  **Key Differentiators for Bob:** Identify 3-4 areas where Bob likely excels against this competitor.
+2.  **Common Landmines:** What are common weaknesses or complaints mentioned in the G2 reviews that I should listen for?
+3.  **Strategic Questions:** Formulate 3 questions I can ask a prospect to subtly highlight the competitor's weaknesses and our strengths.
+
+Here are the links:
+- Competitor Homepage: [Paste URL here]
+- G2 Review Page: [Paste URL here]</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Filters and Search -->
+        <div class="mb-8 flex flex-col sm:flex-row gap-4 justify-between items-center">
+            <div id="filter-container" class="flex flex-wrap gap-2">
+                <button class="filter-button active px-4 py-2 text-sm font-medium rounded-full border" data-filter="all">All</button>
+                <button class="filter-button px-4 py-2 text-sm font-medium rounded-full border" data-filter="strategy-research">Strategy & Research</button>
+                <button class="filter-button px-4 py-2 text-sm font-medium rounded-full border" data-filter="solutioning">Solutioning</button>
+                <button class="filter-button px-4 py-2 text-sm font-medium rounded-full border" data-filter="email-drafts">Email Drafts</button>
+                <button class="filter-button px-4 py-2 text-sm font-medium rounded-full border" data-filter="competitive-intelligence">Competitive</button>
+                <button class="filter-button px-4 py-2 text-sm font-medium rounded-full border" data-filter="technical-explainers">Technical</button>
+                <button class="filter-button px-4 py-2 text-sm font-medium rounded-full border" data-filter="content-creation">Content Creation</button>
+                <button class="filter-button px-4 py-2 text-sm font-medium rounded-full border" data-filter="personal-development">Personal Development</button>
+            </div>
+            <div class="relative w-full sm:w-64">
+                <input type="search" id="search-input" placeholder="Search prompts..." class="w-full pl-10 pr-4 py-2 border rounded-full focus:ring-pink-500 focus:border-pink-500">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prompt Grid -->
+        <div id="prompt-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="strategy-research" data-keywords="company persona research brief">
+                <h3 class="font-semibold text-gray-900">Company & Persona Research Brief</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Generates a concise pre-call brief on a target company and key stakeholder.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">Act as a market research analyst for Bob, a leading HRIS platform. I am preparing for a discovery call.
+
+Generate a one-page brief based on the following information:
+- Company Website: [e.g., www.examplecorp.com]
+- Target Persona: [e.g., "VP of People"]
+
+The brief should contain four sections:
+1.  **Company Overview:** What do they do? What is their industry?
+2.  **Recent News & Initiatives:** Any recent funding, product launches, or hiring trends related to HR and people operations?
+3.  **Likely Persona Pains:** Based on their role and industry, what are 3-5 challenges this person likely faces that Bob can address (e.g., inefficient onboarding, lack of HR data, poor employee engagement)?
+4.  **Strategic Questions:** Suggest 3 open-ended questions I can ask to uncover these pains.</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="solutioning" data-keywords="demo script creator discovery notes">
+                <h3 class="font-semibold text-gray-900">Tailored Demo Script Creator</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Takes an uploaded discovery call transcript and generates a structured, value-oriented demo script for Bob.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">You are a senior Sales Engineer for the Bob HRIS platform. Based on the provided discovery call transcript file, create a tailored demo flow that tells a compelling story.
+
+The output should be a markdown list. For each step in the demo, include:
+-   **The "Why":** State the prospect's pain point you are about to address (e.g., "You mentioned your team struggles with manual performance reviews...").
+-   **The "What":** Describe the specific feature in Bob you will show (e.g., "...so let's look at our automated performance review cycle builder.").
+-   **The "So What":** Explain the business value for the prospect (e.g., "This will save your HR team dozens of hours per quarter and provide managers with consistent data.").</pre>
+                </div>
+            </div>
+            
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="strategy-research" data-keywords="cross-deal trend analysis gong">
+                <h3 class="font-semibold text-gray-900">Cross-Deal Trend Analysis</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Analyzes multiple call transcripts to identify strategic trends, common objections, and feature gaps across a specific segment.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">Act as a strategic sales analyst. I have uploaded 5 call transcripts from recent deals in the [e.g., manufacturing] sector.
+
+Analyze all transcripts and provide a summary of strategic insights in a markdown table with two columns: "Finding" and "Recommendation".
+
+Your findings should include:
+- The top 3 most common objections raised.
+- The top 2 most requested features that Bob does not currently have.
+- A recurring theme or pain point mentioned in at least 3 of the 5 calls.
+
+For each finding, provide a brief, actionable recommendation.</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="email-drafts" data-keywords="follow-up email demo recap">
+                <h3 class="font-semibold text-gray-900">Draft Demo Follow-Up Email</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Creates a concise and effective follow-up email after a Bob demo, summarizing key points and outlining next steps.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">Act as a helpful Sales Engineer for Bob. Draft a follow-up email to a prospect after a product demo.
+
+The email should:
+1. Thank them for their time.
+2. Briefly recap the 2-3 key value propositions of Bob we discussed that aligned with their stated needs.
+3. Clearly outline the agreed-upon next steps.
+4. Maintain a professional and helpful tone.
+
+Here is the key information:
+- Prospect Name: [Prospect's Name]
+- Key Value Props Discussed: [e.g., "Automated onboarding workflows in Bob", "Integrated performance management and goals", "Centralized compensation data"]
+- Next Steps: [e.g., "I will send over the security whitepaper", "We will schedule a follow-up with the implementation team"]</pre>
+                </div>
+            </div>
+            
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="technical-explainers" data-keywords="integration value proposition">
+                <h3 class="font-semibold text-gray-900">Integration Value Proposition</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Explains the business value of a technical integration to a non-technical audience, focusing on outcomes over mechanics.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">I need to explain the value of our integration between Bob and [Partner Name, e.g., Greenhouse].
+
+Draft a short paragraph for a non-technical HR leader. The explanation must:
+1. Avoid technical jargon like "API" or "endpoint".
+2. Focus on the business outcome (e.g., saving time, reducing errors, improving candidate experience).
+3. Use a simple analogy to make the concept clear.
+</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="strategy-research" data-keywords="discovery questions persona">
+                <h3 class="font-semibold text-gray-900">Brainstorm Discovery Questions</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Generates a list of insightful discovery questions to ask a specific persona during a sales call.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">I am a Sales Engineer preparing for a discovery call for the Bob HRIS platform. My goal is to understand the challenges and priorities of the prospect.
+
+Generate a list of 5-7 insightful discovery questions I should ask.
+
+The prospect's persona is: [e.g., "Chief Financial Officer at a mid-market tech company"]</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="solutioning" data-keywords="pain to solution mapping internal alignment">
+                <h3 class="font-semibold text-gray-900">Pain-to-Solution Mapping</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Creates a clear table mapping problems from a call transcript to specific Bob features, perfect for internal alignment with your AE.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">Analyze the provided discovery call transcript. Create a markdown table with two columns: "Prospect's Stated Pain" and "Relevant Bob Solution/Feature".
+
+This table will be used for internal alignment with my Account Executive to ensure we are focused on solving the right problems with the Bob platform.
+
+Example Pains to look for:
+- "Our onboarding process is a mess."
+- "We have no way to track employee engagement."
+- "Reporting on headcount and payroll is a manual nightmare."</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="strategy-research" data-keywords="linkedin profile stakeholder research icebreaker">
+                <h3 class="font-semibold text-gray-900">LinkedIn Profile Stakeholder Brief</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Analyzes a stakeholder's LinkedIn profile to generate a pre-call brief, including icebreakers and likely priorities.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">Act as an executive briefer. I am preparing for a call with a key stakeholder. Based on the text from their LinkedIn profile below, create a one-page brief.
+
+The brief must include:
+1.  **Career Summary:** A brief overview of their professional journey.
+2.  **Potential Priorities:** Based on their current role and past experience, what are their likely business priorities?
+3.  **Conversation Starters:** Suggest 2-3 personalized icebreakers based on their listed interests, alma mater, or previous companies.
+
+Here is the text from their LinkedIn profile:
+[Paste LinkedIn profile text here]</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="solutioning" data-keywords="demo narrative story persona day in the life">
+                <h3 class="font-semibold text-gray-900">"Day in the Life" Demo Narrative</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Creates a compelling story showing how a specific persona would use the Bob platform to solve their daily challenges.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">You are a master storyteller for B2B software. Create a "Day in the Life" narrative for the following persona using the Bob HRIS platform.
+
+**Persona:** [e.g., "Sarah, an HR Manager at a fast-growing startup"]
+
+The narrative should walk through 3-4 scenarios from her day (morning, midday, end of day) and describe how she uses a specific Bob feature to overcome a challenge in each scenario. Focus on the "before" state (the pain) and the "after" state (the relief/value from using Bob). The tone should be engaging and relatable.</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="solutioning" data-keywords="demo data generator sandbox sample">
+                <h3 class="font-semibold text-gray-900">Custom Demo Data Generator</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Creates realistic but fictional employee data (names, departments, job titles) to populate a clean Bob demo environment.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">I need to create sample data to populate a Bob demo environment for a prospect in the [e.g., financial services] industry.
+
+Generate a list of 15 fictional employees with the following columns in a markdown table:
+- Full Name
+- Job Title (must be relevant to the industry)
+- Department (e.g., Finance, Risk & Compliance, Technology)
+- Location (City)
+- Start Date (within the last 2 years)</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="content-creation" data-keywords="workshop training agenda outline presentation">
+                <h3 class="font-semibold text-gray-900">Technical Workshop Outline</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Creates a structured agenda and outline for a customer-facing technical workshop on a specific Bob module.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">You are a curriculum designer. Create a detailed agenda for a 60-minute customer-facing technical workshop.
+
+The topic of the workshop is: "Mastering Bob's Custom Workflows"
+
+The agenda should be broken down into timed sections (e.g., 0-5 mins, 5-15 mins) and include:
+- A brief introduction and goal setting.
+- At least 3 distinct learning modules.
+- A hands-on exercise for the attendees.
+- A dedicated Q&A section at the end.</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="competitive-intelligence" data-keywords="competitive talking points differentiation">
+                <h3 class="font-semibold text-gray-900">"Why Us vs Them" Talking Points</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Generates talking points comparing a Bob feature against a known competitor's alternative, focusing on business value.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">I need to prepare for a discussion where the prospect is comparing Bob with [Competitor Name, e.g., Workday]. They are specifically asking about our approach to [Feature, e.g., Performance Management].
+
+Generate 3 concise talking points that I can use. Each talking point should:
+1.  Acknowledge the competitor's approach.
+2.  Clearly state Bob's unique differentiator.
+3.  Tie our differentiator back to a tangible business benefit (e.g., flexibility, better user experience, faster time to value).</pre>
+                </div>
+            </div>
+
+            <div class="prompt-card bg-white p-6 rounded-lg border border-gray-200" data-category="content-creation" data-keywords="customer story case study testimonial">
+                <h3 class="font-semibold text-gray-900">Customer Story Extractor</h3>
+                <p class="text-sm text-gray-500 mt-2 flex-grow">Analyzes a case study or call transcript to pull out a compelling, concise customer story that can be used in future demos.</p>
+                <div class="mt-4">
+                    <button class="copy-button w-full px-4 py-2 bg-pink-600 text-white font-medium rounded-md hover:bg-pink-700">Copy Prompt</button>
+                    <pre class="hidden">Analyze the attached customer case study or call transcript. My goal is to extract a concise and powerful customer story that I can use as an anecdote in future demos.
+
+The output should be a short paragraph that follows the "Challenge, Solution, Result" framework:
+1.  **Challenge:** What was the customer's primary pain point before Bob?
+2.  **Solution:** What key part of the Bob platform did they use to solve it?
+3.  **Result:** What was the measurable or qualitative outcome they achieved?</pre>
+                </div>
+            </div>
+
+        </div>
+        
+        <div id="no-results" class="hidden text-center py-12">
+            <h3 class="text-xl font-semibold text-gray-800">No Prompts Found</h3>
+            <p class="text-gray-500 mt-2">Try adjusting your search or filter settings.</p>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterContainer = document.getElementById('filter-container');
+            const searchInput = document.getElementById('search-input');
+            const promptGrid = document.getElementById('prompt-grid');
+            const promptCards = Array.from(promptGrid.children);
+            const noResults = document.getElementById('no-results');
+
+            // --- Filter Logic ---
+            let currentFilter = 'all';
+            filterContainer.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const newFilter = e.target.dataset.filter;
+                    if (newFilter !== currentFilter) {
+                        filterContainer.querySelector('.active').classList.remove('active');
+                        e.target.classList.add('active');
+                        currentFilter = newFilter;
+                        applyFilters();
+                    }
+                }
+            });
+
+            // --- Search Logic ---
+            let searchTerm = '';
+            searchInput.addEventListener('input', (e) => {
+                searchTerm = e.target.value.toLowerCase();
+                applyFilters();
+            });
+
+            // --- Combined Filter and Search Function ---
+            function applyFilters() {
+                let resultsFound = false;
+                promptCards.forEach(card => {
+                    const category = card.dataset.category;
+                    const keywords = card.dataset.keywords;
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    
+                    const categoryMatch = currentFilter === 'all' || category === currentFilter;
+                    const searchMatch = keywords.toLowerCase().includes(searchTerm) || title.includes(searchTerm);
+
+                    if (categoryMatch && searchMatch) {
+                        card.classList.remove('hidden');
+                        resultsFound = true;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+                noResults.classList.toggle('hidden', resultsFound);
+            }
+
+            // --- Copy Button Functionality ---
+            document.body.addEventListener('click', (e) => {
+                if (e.target.classList.contains('copy-button')) {
+                    const button = e.target;
+                    const promptText = button.nextElementSibling.innerText;
+                    
+                    // Create a temporary textarea to hold the text
+                    const textArea = document.createElement('textarea');
+                    textArea.value = promptText;
+                    
+                    // Make the textarea invisible
+                    textArea.style.position = 'fixed';
+                    textArea.style.top = '-9999px';
+                    textArea.style.left = '-9999px';
+
+                    document.body.appendChild(textArea);
+                    textArea.select();
+
+                    try {
+                        // Use the deprecated but more compatible execCommand
+                        document.execCommand('copy');
+                        
+                        // Visual feedback
+                        const originalText = button.textContent;
+                        button.textContent = 'Copied!';
+                        button.classList.add('copied');
+                        
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.classList.remove('copied');
+                        }, 2000);
+
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+
+                    document.body.removeChild(textArea);
+                }
+            });
+        });
+    </script>
+<script>
+(function(){
+  // Use the same Web App URL you use for Roadmap votes
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+
+  // Generate (or read) a stable anonymous client ID per browser
+  window.SEHUB_CLIENT_ID = (function(){
+    const k='sehub.cid';
+    let v=localStorage.getItem(k);
+    if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
+      localStorage.setItem(k,v);
+    }
+    return v;
+  })();
+
+  // Lightweight telemetry sender
+  window.sendTelemetry = function(page, action, itemId){
+    try {
+      fetch(WEB_APP_URL + '?route=telemetry', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
+          action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
+          itemId: itemId || '',// assistant id, prompt title, roadmap id
+          clientId: window.SEHUB_CLIENT_ID,
+          ua: navigator.userAgent
+        })
+      });
+    } catch (e) { /* fail silently */ }
+  };
+})();
+</script>
+<script>
+    (function(){
+      // Use the same Web App URL you use for Roadmap votes
+      const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+    
+      // Generate (or read) a stable anonymous client ID per browser
+      window.SEHUB_CLIENT_ID = (function(){
+        const k='sehub.cid';
+        let v=localStorage.getItem(k);
+        if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
+          localStorage.setItem(k,v);
+        }
+        return v;
+      })();
+    
+      // Lightweight telemetry sender
+      window.sendTelemetry = function(page, action, itemId){
+        try {
+          fetch(WEB_APP_URL + '?route=telemetry', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
+              action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
+              itemId: itemId || '',// assistant id, prompt title, roadmap id
+              clientId: window.SEHUB_CLIENT_ID,
+              ua: navigator.userAgent
+            })
+          });
+        } catch (e) { /* fail silently */ }
+      };
+    })();
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+          // Log a page view when library.html loads
+          sendTelemetry('library','view');
+        
+          // When any "Copy" button is clicked, send the prompt title to telemetry
+          document.body.addEventListener('click', function(e){
+            if (e.target.classList && e.target.classList.contains('copy-button')){
+              const card = e.target.closest('.prompt-card');
+              const title = card ? (card.querySelector('h3')||{}).textContent : 'prompt';
+              sendTelemetry('library','copy_prompt', title);
+            }
+          });
+        });
+        </script>
+</body>
+</html>

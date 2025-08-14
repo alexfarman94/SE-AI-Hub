@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap - SE AI Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --hibob-pink: #e6007e;
+            --hibob-burgundy: #6a0e29;
+            --hibob-light-pink: #fef6f8;
+            --hibob-dark-gray: #333333;
+            --hibob-bg: #f9f9fb; /* Softer background color */
+            --hibob-purple: #a855f7;
+            --hibob-blue: #3b82f6;
+        }
+        body { font-family: 'Inter', sans-serif; color: var(--hibob-dark-gray); background-color: var(--hibob-bg); }
+        .text-hibob-pink { color: var(--hibob-pink); }
+        .border-hibob-pink { border-color: var(--hibob-pink); }
+        .text-hibob-burgundy { color: var(--hibob-burgundy); }
+        .roadmap-card { 
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+            border: 1px solid #e5e7eb;
+        }
+        .roadmap-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+        }
+        .vote-btn { transition: all 0.2s ease; }
+        .vote-btn.voted { background-color: var(--hibob-pink); color: white; cursor: not-allowed; }
+        .vote-progress-bar { background-color: #e5e7eb; border-radius: 9999px; overflow: hidden; }
+        .vote-progress { 
+            background-image: linear-gradient(to right, var(--hibob-purple), var(--hibob-pink));
+            transition: width 0.5s ease; 
+        }
+        .status-tag { font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 9999px; text-transform: uppercase; }
+        .status-in-development { background-color: var(--hibob-blue); color: white; }
+        .status-ideation { background-color: var(--hibob-purple); color: white; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <main class="container mx-auto p-6 md:p-8">
+        <!-- Roadmap Page -->
+        <div id="roadmap">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-2">AI Development Roadmap</h2>
+                <p class="text-gray-600">Vote for the features you want most! Your input directly influences our priorities.</p>
+            </div>
+            <div id="roadmap-container" class="space-y-6">
+                <!-- Loading Skeleton -->
+                <div class="bg-white rounded-lg shadow-sm p-6 animate-pulse">
+                    <div class="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                    <div class="h-6 bg-gray-300 rounded w-1/2 mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white mt-12 py-6">
+        <div class="container mx-auto text-center text-gray-500">
+            <p>&copy; 2025 HiBob Sales Engineering. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Live Web App URL ---
+            const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+
+            // --- Data Definitions (Static part) ---
+            let roadmapItems = [
+                { id: 1, title: "Go/No-Go GPT", status: "In Development", description: "An evolution of the RFP Analyzer. This enhanced GPT will analyze inbound opportunities against a refined set of criteria, including technical red flags, competitive landscape, and alignment with ideal customer profile to provide a more robust Go/No-Go recommendation.", category: "Opportunity Qualification", voted: false, votes: 0 },
+                { id: 3, title: "Deal Risk Analysis", status: "Ideation", description: "Provides a critical, data-driven view of any active opportunity. Scrutinizes Salesforce data and call transcripts to identify key risks (e.g., no economic buyer, weak champion, competitor mentions) and provides a risk score with actionable mitigation suggestions.", category: "Deal Execution", voted: false, votes: 0 },
+                { id: 4, title: "Bob Brain GPT", status: "Ideation", description: "The next-level 'Ask AI' experience. A fully integrated GPT connected to Salesforce, Gong, Help Center, and Community forums. Use cases include asking for demo workarounds, summarizing recent support tickets for a client, or finding win stories for a specific vertical.", category: "Knowledge Management", voted: false, votes: 0 },
+                { id: 5, title: "Integrations GPT", status: "Ideation", description: "Queries live Salesforce data to answer questions about our real-world integration landscape. Can answer questions like 'Which customers in the finance vertical use our NetSuite integration?' or 'Show me a diagram of the data flow for the Greenhouse integration.'", category: "Technical Expertise", voted: false, votes: 0 },
+                { id: 6, title: "SE Coaching Assistant", status: "Ideation", description: "A personal coach for every SE. Analyze your own Gong calls to get feedback on demo pacing, talk-to-listen ratio, and how effectively you handled objections. Get personalized tips for improvement.", category: "Team Enablement", voted: false, votes: 0 },
+                { id: 7, title: "Manager Coaching Assistant", status: "Ideation", description: "A coaching tool for SE Managers. Get a high-level summary of your team's performance metrics from Gong, identify coaching opportunities, and get suggestions for 1:1 topics based on recent deal activities.", category: "Team Enablement", voted: false, votes: 0 },
+                { id: 8, title: "Automated Win Plan Creation", status: "Ideation", description: "A workflow automation that triggers when a new opportunity is created in Salesforce. It will auto-generate a standardized 'Win Plan' document in Notion, pre-populated with key deal information, ready for the SE to begin their strategy.", category: "Workflow Automation", voted: false, votes: 0 },
+            ];
+
+            // --- Roadmap & Voting Logic ---
+            async function fetchVotes() {
+                if (WEB_APP_URL.includes('PASTE_YOUR_URL')) {
+                    console.error("Please update the WEB_APP_URL in the script.");
+                    document.getElementById('roadmap-container').innerHTML = `<div class="text-center text-red-500">Configuration error: Web App URL not set.</div>`;
+                    return;
+                }
+                try {
+                    const response = await fetch(WEB_APP_URL);
+                    const voteData = await response.json();
+                    
+                    roadmapItems.forEach(item => {
+                        const data = voteData.find(d => d.Item === item.title);
+                        if (data) {
+                            item.votes = parseInt(data.Votes, 10) || 0;
+                        } else {
+                            item.votes = 0;
+                        }
+                    });
+
+                } catch (error) {
+                    console.error("Error fetching votes:", error);
+                }
+                loadLocalVotes();
+                renderRoadmap();
+            }
+
+            function loadLocalVotes() {
+                const localVotes = JSON.parse(localStorage.getItem('hibob-se-ai-local-votes') || '{}');
+                roadmapItems.forEach(item => {
+                    if (localVotes[item.id]) {
+                        item.voted = true;
+                    }
+                });
+            }
+
+            function saveLocalVote(itemId) {
+                const localVotes = JSON.parse(localStorage.getItem('hibob-se-ai-local-votes') || '{}');
+                localVotes[itemId] = true;
+                localStorage.setItem('hibob-se-ai-local-votes', JSON.stringify(localVotes));
+            }
+            
+            window.handleVote = async function(itemId) {
+                const item = roadmapItems.find(i => i.id === itemId);
+                if (!item || item.voted) return;
+
+                item.votes++;
+                item.voted = true;
+                saveLocalVote(itemId);
+                renderRoadmap();
+
+                try {
+                    await fetch(WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ item: item.title })
+                    });
+                } catch (error) {
+                    console.error("Error submitting vote:", error);
+                }
+            }
+
+            function renderRoadmap() {
+                const container = document.getElementById('roadmap-container');
+                if (!container) return;
+
+                roadmapItems.sort((a, b) => b.votes - a.votes);
+                const maxVotes = Math.max(...roadmapItems.map(item => item.votes), 25);
+
+                container.innerHTML = roadmapItems.map(item => {
+                    const hasVoted = item.voted;
+                    const votePercentage = (item.votes / maxVotes) * 100;
+                    const statusClass = `status-${item.status.toLowerCase().replace(' ', '-')}`;
+
+                    return `
+                        <div class="roadmap-card bg-white rounded-lg shadow-sm p-6">
+                            <div class="flex flex-col sm:flex-row justify-between items-start">
+                                <div class="flex-grow mb-4 sm:mb-0 pr-4">
+                                    <div class="flex items-center space-x-3 mb-1">
+                                       <span class="text-xs font-bold uppercase text-hibob-pink">${item.category}</span>
+                                       <span class="status-tag ${statusClass}">${item.status}</span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-hibob-burgundy mt-1">${item.title}</h3>
+                                    <p class="text-gray-600 mt-2">${item.description}</p>
+                                </div>
+                                <div class="flex-shrink-0 flex items-center space-x-4 ml-0 sm:ml-6">
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold">${item.votes}</div>
+                                        <div class="text-sm text-gray-500">VOTES</div>
+                                    </div>
+                                    <button class="vote-btn border-2 border-hibob-pink text-hibob-pink font-bold py-2 px-4 rounded-full ${hasVoted ? 'voted' : ''}" onclick="handleVote(${item.id})" ${hasVoted ? 'disabled' : ''}>
+                                        <i class="fas fa-arrow-up mr-2"></i> ${hasVoted ? 'Voted' : 'Vote'}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="vote-progress-bar h-2 w-full">
+                                    <div class="vote-progress h-full" style="width: ${votePercentage}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            fetchVotes();
+        });
+    </script>
+    <script>
+        (function(){
+          // Use the same Web App URL you use for Roadmap votes
+          const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+        
+          // Generate (or read) a stable anonymous client ID per browser
+          window.SEHUB_CLIENT_ID = (function(){
+            const k='sehub.cid';
+            let v=localStorage.getItem(k);
+            if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
+              localStorage.setItem(k,v);
+            }
+            return v;
+          })();
+        
+          // Lightweight telemetry sender
+          window.sendTelemetry = function(page, action, itemId){
+            try {
+              fetch(WEB_APP_URL + '?route=telemetry', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
+                  action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
+                  itemId: itemId || '',// assistant id, prompt title, roadmap id
+                  clientId: window.SEHUB_CLIENT_ID,
+                  ua: navigator.userAgent
+                })
+              });
+            } catch (e) { /* fail silently */ }
+          };
+        })();
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function(){
+              sendTelemetry('roadmap','view');
+            });
+            </script>
+</body>
+</html>

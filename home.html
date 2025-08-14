@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE AI Hub - Home</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+        }
+        .quick-link-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .quick-link-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -2px rgb(0 0 0 / 0.07);
+        }
+        .update-item-icon {
+            flex-shrink: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-20 sm:py-28">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight">
+                    Sales Engineering AI Hub
+                </h1>
+                <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-600">
+                    A central platform for AI-powered tools, collaborative roadmapping and innovation for SE's.
+                </p>
+                
+                <!-- Quick Link Cards -->
+                <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <a href="https://sites.google.com/hibob.io/se-ai-hub/live-ai-assistants" target="_blank" class="quick-link-card bg-white p-6 rounded-lg border border-gray-200 text-left">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-pink-100 text-pink-600 p-2 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Explore AI Assistants</h3>
+                                <p class="text-sm text-gray-500 mt-1">Browse our library of custom tools designed to accelerate your workflow.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://sites.google.com/hibob.io/se-ai-hub/assistant-pipeline" target="_blank" class="quick-link-card bg-white p-6 rounded-lg border border-gray-200 text-left">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="m12 12-2 5h4l-2 5"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Vote on the Roadmap</h3>
+                                <p class="text-sm text-gray-500 mt-1">See what's in development and vote for the features you want most.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://sites.google.com/hibob.io/se-ai-hub/build-your-own" target="_blank" class="quick-link-card bg-white p-6 rounded-lg border border-gray-200 text-left">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-green-100 text-green-600 p-2 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Build Your Own Assistant</h3>
+                                <p class="text-sm text-gray-500 mt-1">Follow our guide to create and train a custom AI for your specific tasks.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://sites.google.com/hibob.io/se-ai-hub/request-a-gpt" target="_blank" class="quick-link-card bg-white p-6 rounded-lg border border-gray-200 text-left">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-purple-100 text-purple-600 p-2 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.03 5.3a.5.5 0 0 1 .5.5v12.4a.5.5 0 0 1-.5-.5h-10a.5.5 0 0 1-.5-.5V5.8a.5.5 0 0 1 .5-.5h10z"/><path d="M12 12h.01"/><path d="M15 5h-1a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2H5"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Request a GPT</h3>
+                                <p class="text-sm text-gray-500 mt-1">Have a great idea for a new tool? Submit your request here.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Onboarding Call-to-Action -->
+                <div class="mt-10 max-w-4xl mx-auto">
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                         <h2 class="text-xl font-bold text-gray-800">New to the Hub? Start Here.</h2>
+                         <p class="mt-2 text-gray-600 max-w-2xl mx-auto">This playbook is the best place to start. It connects our AI tools and prompts directly to your daily workflow, showing you exactly how and when to use them for maximum impact.</p>
+                         <a href="https://sites.google.com/hibob.io/se-ai-hub/playbook" target="_blank" class="inline-block mt-4 bg-pink-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors">
+                            View the Playbook
+                         </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Featured Content Section -->
+        <section class="bg-white py-16 sm:py-20 border-t border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    
+                    <!-- 
+                        NOTE FOR FUTURE DEVELOPMENT:
+                        The content in "Latest Updates" and "Top Community Request" is currently static.
+                        For long-term success, this should be automated to pull data from a Google Sheet 
+                        or another content source to keep the homepage fresh and dynamic.
+                    -->
+
+                    <!-- Latest Updates -->
+                    <div>
+                        <h2 class="text-2xl font-bold tracking-tight text-gray-900">Latest Updates</h2>
+                        <div class="mt-6 space-y-5">
+                            <div class="flex items-start gap-4">
+                                <div class="update-item-icon bg-green-100 text-green-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">New Tool Added: Deal IQ</h4>
+                                    <p class="text-sm text-gray-500">A new assistant to provide critical evaluation of sales deals is now LIVE.</p>
+                                </div>
+                            </div>
+                             <div class="flex items-start gap-4">
+                                <div class="update-item-icon bg-blue-100 text-blue-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><path d="M14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Video Demos Added</h4>
+                                    <p class="text-sm text-gray-500">All live assistants now have video demos. Check them out on the details page!</p>
+                                </div>
+                            </div>
+                             <div class="flex items-start gap-4">
+                                <div class="update-item-icon bg-pink-100 text-pink-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Roadmap Voting is Live!</h4>
+                                    <p class="text-sm text-gray-500">Your votes now directly update our central roadmap. Make your voice heard!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                   <!-- Top Community Request (Dynamic) -->
+<div id="top-request" class="mt-6 bg-gray-50 p-6 rounded-lg border border-gray-200">
+    <div class="flex justify-between items-start">
+      <div>
+        <h3 id="top-title" class="text-lg font-semibold text-gray-900">Loading…</h3>
+        <p id="top-desc" class="mt-1 text-gray-600">Fetching the current top request.</p>
+      </div>
+      <div class="text-right flex-shrink-0 ml-4">
+        <div id="top-votes" class="text-3xl font-bold text-pink-600">–</div>
+        <div class="text-sm text-gray-500">VOTES</div>
+      </div>
+    </div>
+    <div class="mt-4 flex flex-wrap gap-3 items-center">
+      <a href="https://sites.google.com/hibob.io/se-ai-hub/assistant-pipeline" target="_blank" class="inline-flex items-center font-medium text-pink-600 hover:text-pink-500 text-sm">
+        Vote or discuss on the roadmap →
+      </a>
+      <button id="vote-btn" type="button" class="border-2 border-pink-600 text-pink-600 font-bold py-1.5 px-3 rounded-full text-sm">▲ Vote</button>
+    </div>
+  </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        (function(){
+          // ---- CONFIG ----
+          // Reuse the same Web App URL used on the Roadmap page
+          const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+          // Optional: if your Sheet stores nice display names separately from Item, map them here:
+          const DESCRIPTIONS = {
+            'Go/No-Go GPT': 'An evolution of the RFP Analyzer to provide a robust Go/No-Go recommendation.',
+            'Deal Risk Analysis': 'Data-driven risks & mitigation suggestions from transcripts and CRM.',
+            'Bob Brain GPT': 'Unified Q&A across Salesforce, Gong, Help Center & Community.'
+          };
+        
+          // ---- STATE ----
+          const votedKey = 'hibob-se-ai-local-votes'; // same pattern as roadmap page
+          let top = null; // { Item, Votes }
+        
+          // ---- DOM ----
+          const $title = document.getElementById('top-title');
+          const $desc  = document.getElementById('top-desc');
+          const $votes = document.getElementById('top-votes');
+          const $btn   = document.getElementById('vote-btn');
+        
+          // ---- INIT ----
+          fetchTop().then(render).catch(err => {
+            console.error('Failed to fetch votes', err);
+            $title.textContent = 'Top Community Request';
+            $desc.textContent  = 'Unable to load votes right now.';
+            $votes.textContent = '–';
+            $btn.disabled = true;
+          });
+        
+          // ---- FUNCTIONS ----
+          async function fetchTop(){
+            const res = await fetch(WEB_APP_URL); // GET returns JSON array of rows
+            const rows = await res.json();        // [{ Item: '...', Votes: 12 }, ...]
+            if (!Array.isArray(rows) || rows.length === 0) throw new Error('empty');
+            // Find max Votes (numeric)
+            rows.sort((a,b)=> (toNum(b.Votes) - toNum(a.Votes)) || String(a.Item).localeCompare(String(b.Item)));
+            top = rows[0];
+            // Attach display fields
+            top._title = String(top.Item || 'Top Community Request');
+            top._votes = toNum(top.Votes);
+            top._desc  = DESCRIPTIONS[top._title] || 'Popular request from the team.';
+            return top;
+          }
+        
+          function render(){
+            const alreadyVoted = readLocal(top._title);
+            $title.textContent = top._title;
+            $desc.textContent  = top._desc;
+            $votes.textContent = top._votes;
+            setBtnState(alreadyVoted);
+        
+            $btn.onclick = async function(){
+              if (readLocal(top._title)) return;
+              // optimistic UI
+              const prev = top._votes;
+              top._votes += 1;
+              $votes.textContent = String(top._votes);
+              setBtnState(true);
+              writeLocal(top._title);
+        
+              try {
+                // Apps Script POST; many deployments require no-cors
+                await fetch(WEB_APP_URL, {
+                  method: 'POST',
+                  mode: 'no-cors', // prevents CORS errors on Sites; we trust optimistic update
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ item: top._title }) // matches doPost schema
+                });
+              } catch (e){
+                console.warn('Vote POST failed (network). UI left optimistic.', e);
+                // Optional rollback if you prefer strictness:
+                // top._votes = prev; $votes.textContent = String(prev); setBtnState(false); removeLocal(top._title);
+              }
+            };
+          }
+        
+          // ---- helpers ----
+          function toNum(v){ const n = parseInt(v,10); return isNaN(n) ? 0 : n; }
+          function readLocal(id){ try { return JSON.parse(localStorage.getItem(votedKey)||'{}')[id]; } catch { return false; } }
+          function writeLocal(id){ try { const map = JSON.parse(localStorage.getItem(votedKey)||'{}'); map[id]=true; localStorage.setItem(votedKey, JSON.stringify(map)); } catch {}
+          }
+          function removeLocal(id){ try { const map = JSON.parse(localStorage.getItem(votedKey)||'{}'); delete map[id]; localStorage.setItem(votedKey, JSON.stringify(map)); } catch {}
+          }
+          function setBtnState(v){
+            $btn.disabled = !!v;
+            if (v){
+              $btn.classList.add('bg-pink-600','text-white');
+              $btn.textContent = 'Voted';
+            } else {
+              $btn.classList.remove('bg-pink-600','text-white');
+              $btn.textContent = '▲ Vote';
+            }
+          }
+        })();
+        </script>
+        <script>
+            (function(){
+              // Use the same Web App URL you use for Roadmap votes
+              const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+            
+              // Generate (or read) a stable anonymous client ID per browser
+              window.SEHUB_CLIENT_ID = (function(){
+                const k='sehub.cid';
+                let v=localStorage.getItem(k);
+                if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
+                  localStorage.setItem(k,v);
+                }
+                return v;
+              })();
+            
+              // Lightweight telemetry sender
+              window.sendTelemetry = function(page, action, itemId){
+                try {
+                  fetch(WEB_APP_URL + '?route=telemetry', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
+                      action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
+                      itemId: itemId || '',// assistant id, prompt title, roadmap id
+                      clientId: window.SEHUB_CLIENT_ID,
+                      ua: navigator.userAgent
+                    })
+                  });
+                } catch (e) { /* fail silently */ }
+              };
+            })();
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function(){
+                  // Page view
+                  sendTelemetry('home', 'view');
+                
+                  // Track clicks on Quick Link cards
+                  document.querySelectorAll('a.quick-link-card').forEach(a => {
+                    const title = (a.querySelector('h3')||{}).textContent || 'quick_link';
+                    a.addEventListener('click', ()=> sendTelemetry('home','launch_assistant', title));
+                  });
+                });
+                </script>
+</body>
+</html>

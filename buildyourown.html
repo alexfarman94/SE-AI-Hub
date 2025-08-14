@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE AI Hub - How to Build Custom Assistants</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles to match the HiBob brand aesthetic */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+        }
+        .prompt-container {
+            background-color: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            position: relative;
+        }
+        .copy-button {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #FFFFFF;
+            border: 1px solid #D1D5DB;
+            color: #4B5563;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .copy-button:hover {
+            background-color: #F9FAFB;
+        }
+        .copy-button.copied {
+            background-color: #D1FAE5;
+            color: #065F46;
+            border-color: #6EE7B7;
+        }
+        
+        /* Tab styling */
+        .tab-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-button.active {
+            border-bottom-color: #EC4899; /* Pink accent color */
+            color: #EC4899;
+        }
+
+        /* Vertical timeline styles */
+        .timeline-container {
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            bottom: 1rem;
+            width: 2px;
+            background-color: #E5E7EB;
+            z-index: 0;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        .timeline-step-number {
+            position: absolute;
+            left: -2.5rem;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #BE185D;
+            background-color: #F9FAFB;
+            z-index: 1;
+        }
+        .timeline-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+        }
+        
+        /* New Concept Card styles */
+        .concept-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            text-align: center;
+        }
+        .concept-icon {
+            margin: 0 auto 1rem;
+            background-color: #FCE7F3;
+            color: #DB2777;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <!-- Header Section -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 tracking-tight">
+                Build Your Own AI Assistant
+            </h1>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">
+                Create powerful, custom AI assistants for your specific SE tasks. This guide works for both Custom GPTs and Gemini.
+            </p>
+        </div>
+
+        <!-- Core Concepts Grid -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-10">The 3 Building Blocks of an Assistant</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Instructions Card -->
+                <div class="concept-card">
+                    <div class="concept-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.03 5.3a.5.5 0 0 1 .5.5v12.4a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5V5.8a.5.5 0 0 1 .5-.5h10z"/><path d="M15 5h-1a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2H5"/><path d="M9 12h6"/><path d="M9 15h3"/></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">1. Instructions</h3>
+                    <p class="text-gray-600">The "brain" of your assistant. The prompt that defines its personality, its goal, what it should do and what it should not do.</p>
+                </div>
+                <!-- Knowledge Card -->
+                <div class="concept-card">
+                    <div class="concept-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">2. Knowledge</h3>
+                    <p class="text-gray-600">The specific files and data you give your assistant so it can provide accurate, context-aware answers. Best data formats are `.txt` and `.md`.</p>
+                </div>
+                <!-- Capabilities Card -->
+                <div class="concept-card">
+                    <div class="concept-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 3-3 3h-3v3l-3 3v3h-3l-3 3"/><path d="m18 15-3-3h-3v-3l-3-3v-3h-3l-3-3"/><path d="m21 21-3-3h-3v-3l-3-3v-3h-3l-3-3"/></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">3. Capabilities</h3>
+                    <p class="text-gray-600">Special powers you grant your assistant, like browsing the web for live information, creating images or analyzing data files.</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Meta-Prompt Section -->
+        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md mb-12 border border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3">The "Prompt Architect" Meta-Prompt</h2>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+                This is your master key. Copy the text below and give it to GPT or Gemini to have it build the set of instructions for your new assistant.
+            </p>
+            <div class="prompt-container rounded-md p-6">
+                <button id="copy-btn-meta" class="copy-button">
+                    <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <svg class="check-icon hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span class="button-text">Copy</span>
+                </button>
+                <!-- This pre tag is hidden and used for the actual copy function -->
+                <pre id="meta-prompt" class="hidden">You are an AI assistant specialized in prompt engineering, acting as a "Prompt Architect." Your goal is to help me, a Sales Engineer, create a highly effective and detailed prompt for a specific task I need to accomplish. Your process must follow these rules: 1. Do not generate the final prompt immediately. 2. Your primary function is to interview me to gather all necessary context. 3. Start by asking me to briefly describe my goal. 4. After my initial description, ask me clarifying questions one at a time to understand the nuances of the request. These questions should cover areas such as: * The primary audience for the final output (e.g., technical, executive, sales). * The specific objective or desired outcome. * The required format (e.g., list, table, email draft, summary). * The desired tone of voice (e.g., formal, conversational, technical). * Key information that must be included or excluded. * Any constraints, context, or source material I will provide (e.g., a transcript, meeting notes). 5. Once you are confident you have all the necessary details, state "I have enough information. Here is your optimized prompt:" and then provide the final, complete prompt in a single code block. Acknowledge you understand these instructions and begin by asking me about my initial goal.</pre>
+                <!-- This div is for display purposes only -->
+                <div id="formatted-prompt" class="text-gray-700 space-y-4 text-sm">
+                    <p>You are an AI assistant specialized in prompt engineering, acting as a "Prompt Architect." Your goal is to help me, a Sales Engineer, create a highly effective and detailed prompt for a specific task I need to accomplish.</p>
+                    <p class="font-semibold">Your process must follow these rules:</p>
+                    <ol class="list-decimal list-inside space-y-2">
+                        <li>Do not generate the final prompt immediately.</li>
+                        <li>Your primary function is to interview me to gather all necessary context.</li>
+                        <li>Start by asking me to briefly describe my goal.</li>
+                        <li>After my initial description, ask me clarifying questions one at a time to understand the nuances of the request. These questions should cover areas such as:
+                            <ul class="list-disc list-inside pl-4 mt-2 space-y-1 text-gray-600">
+                                <li>The primary audience for the final output.</li>
+                                <li>The specific objective or desired outcome.</li>
+                                <li>The required format (e.g., list, table, email).</li>
+                                <li>The desired tone of voice.</li>
+                                <li>Key information that must be included/excluded.</li>
+                                <li>Any constraints or source material to be used.</li>
+                            </ul>
+                        </li>
+                        <li>Once you are confident you have all the necessary details, state "I have enough information. Here is your optimized prompt:" and then provide the final, complete prompt in a single code block.</li>
+                    </ol>
+                    <p>Acknowledge you understand these instructions and begin by asking me about my initial goal.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs for GPT vs Gemini -->
+        <div class="mb-8 border-b border-gray-200">
+            <nav class="-mb-px flex justify-center space-x-8" aria-label="Tabs">
+                <button id="tab-gpt" class="tab-button active whitespace-nowrap py-4 px-1 text-base font-medium">Create a Custom GPT</button>
+                <button id="tab-gemini" class="tab-button whitespace-nowrap py-4 px-1 text-base font-medium text-gray-500 hover:text-gray-700">Create a Custom Gem</button>
+            </nav>
+        </div>
+
+        <!-- Content for Tabs -->
+        <div id="content-gpt">
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                <!-- Steps for GPT -->
+                <div class="timeline-item">
+                    <div class="timeline-step-number">01</div>
+                    <div class="timeline-card">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Navigate to the Editor</h3>
+                        <p class="text-gray-600 mb-4">In ChatGPT, click "Explore GPTs" in the sidebar, then click the "+ Create" button in the top-right corner to open the editor.</p>
+                        <img src="https://lh3.googleusercontent.com/d/1-k5jwkLhJlShUXTA1KO2dDOVZDIIZ_vd" alt="Screenshot highlighting the Explore GPTs and Create buttons" class="w-full rounded-md border">
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-step-number">02</div>
+                    <div class="timeline-card">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Generate & Paste Instructions</h3>
+                        <p class="text-gray-600 mb-4">Ignore the "Create" tab and go directly to the "Configure" tab. Use the "Prompt Architect" (in a separate chat) to generate your instructions, then copy and paste them into the "Instructions" field.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-step-number">03</div>
+                    <div class="timeline-card">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Upload Knowledge & Set Capabilities</h3>
+                        <p class="text-gray-600 mb-4">In the "Configure" tab, scroll down to the "Knowledge" section and click "Upload files" to add your curated documents. Then, select any capabilities your assistant needs.</p>
+                        <img src="https://lh3.googleusercontent.com/d/1c_Y_KYEMI-DKjEUlh65ZeLgP1RXYNVCm" alt="Screenshot highlighting the Upload files button under Knowledge" class="w-full rounded-md border">
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-step-number">04</div>
+                    <div class="timeline-card">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Name, Test & Save</h3>
+                        <p class="text-gray-600 mb-4">Give your GPT a name, description, and icon. Test it in the preview panel on the right. When ready, click "Save" and choose how to share it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-gemini" class="hidden">
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                <!-- Steps for Gemini -->
+                <div class="timeline-item">
+                    <div class="timeline-step-number">01</div>
+                    <div class="timeline-card">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Navigate to Gem Manager</h3>
+                        <p class="text-gray-600 mb-4">In Gemini, click "Explore Gems" in the sidebar to open the Gem Manager.</p>
+                         <img src="https://lh3.googleusercontent.com/d/1ehG5BlesWv60mD7NkUk96jOAuJNNlVKh" alt="Screenshot showing where to click Explore Gems" class="w-full rounded-md border">
+                    </div>
+                </div>
+                 <div class="timeline-item">
+                    <div class="timeline-step-number">02</div>
+                    <div class="timeline-card">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Create a New Gem</h3>
+                        <p class="text-gray-600 mb-4">From the Gem Manager, click the "+ New Gem" button to open the editor.</p>
+                         <img src="https://lh3.googleusercontent.com/d/1SxyvUUOnRj0PrSEsrFaFtJGCOPdpoaIW" alt="Screenshot showing the New Gem button" class="w-full rounded-md border">
+                    </div>
+                </div>
+                 <div class="timeline-item">
+                    <div class="timeline-step-number">03</div>
+                    <div class="timeline-card">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Generate & Paste Instructions</h3>
+                        <p class="text-gray-600 mb-4">Use the "Prompt Architect" (in a separate Gemini chat) to generate your instructions. Copy the final output and paste it into the "Instructions" field in the Gem editor.</p>
+                        <img src="https://lh3.googleusercontent.com/d/1ty6bXqx3P5XxH536M9tW7BoJRecn-vto" alt="Screenshot of the Gem editor's instructions field" class="w-full rounded-md border">
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-step-number">04</div>
+                    <div class="timeline-card">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Add Knowledge, Name & Save</h3>
+                        <p class="text-gray-600 mb-4">Add your curated files under "Knowledge". Give your Gem a name, test it in the preview panel, and click "Save" in the top right to finish.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Tab Functionality ---
+            const tabGpt = document.getElementById('tab-gpt');
+            const tabGemini = document.getElementById('tab-gemini');
+            const contentGpt = document.getElementById('content-gpt');
+            const contentGemini = document.getElementById('content-gemini');
+
+            tabGpt.addEventListener('click', () => {
+                tabGpt.classList.add('active', 'text-pink-600');
+                tabGemini.classList.remove('active', 'text-pink-600');
+                contentGpt.classList.remove('hidden');
+                contentGemini.classList.add('hidden');
+            });
+
+            tabGemini.addEventListener('click', () => {
+                tabGemini.classList.add('active', 'text-pink-600');
+                tabGpt.classList.remove('active', 'text-pink-600');
+                contentGemini.classList.remove('hidden');
+                contentGpt.classList.add('hidden');
+            });
+
+            // --- Copy Button Functionality ---
+            const setupCopyButton = (buttonId, textElementId) => {
+                const button = document.getElementById(buttonId);
+                const textElement = document.getElementById(textElementId);
+                if (!button || !textElement) return;
+
+                const copyIcon = button.querySelector('.copy-icon');
+                const checkIcon = button.querySelector('.check-icon');
+                const buttonText = button.querySelector('.button-text');
+
+                button.addEventListener('click', () => {
+                    // Use the hidden pre tag for copying raw text
+                    const textToCopy = textElement.innerText;
+                    const textArea = document.createElement('textarea');
+                    textArea.value = textToCopy;
+                    textArea.style.position = 'fixed';
+                    textArea.style.top = '-9999px';
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        button.classList.add('copied');
+                        copyIcon.classList.add('hidden');
+                        checkIcon.classList.remove('hidden');
+                        buttonText.textContent = 'Copied!';
+                        setTimeout(() => {
+                            button.classList.remove('copied');
+                            copyIcon.classList.remove('hidden');
+                            checkIcon.classList.add('hidden');
+                            buttonText.textContent = 'Copy';
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Copy failed', err);
+                    }
+                    document.body.removeChild(textArea);
+                });
+            };
+
+            setupCopyButton('copy-btn-meta', 'meta-prompt');
+        });
+    </script>
+<script>
+    (function(){
+      // Use the same Web App URL you use for Roadmap votes
+      const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+    
+      // Generate (or read) a stable anonymous client ID per browser
+      window.SEHUB_CLIENT_ID = (function(){
+        const k='sehub.cid';
+        let v=localStorage.getItem(k);
+        if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
+          localStorage.setItem(k,v);
+        }
+        return v;
+      })();
+    
+      // Lightweight telemetry sender
+      window.sendTelemetry = function(page, action, itemId){
+        try {
+          fetch(WEB_APP_URL + '?route=telemetry', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
+              action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
+              itemId: itemId || '',// assistant id, prompt title, roadmap id
+              clientId: window.SEHUB_CLIENT_ID,
+              ua: navigator.userAgent
+            })
+          });
+        } catch (e) { /* fail silently */ }
+      };
+    })();
+    </script>
+</body>
+</html>

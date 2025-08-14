@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE AI Hub - The Playbook</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+        }
+        .phase-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+        }
+        .phase-number {
+            background-color: #EC4899; /* Pink */
+            color: white;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .resource-link {
+            transition: color 0.2s ease-in-out;
+        }
+        .sf-stage-tag {
+            background-color: #E0E7FF;
+            color: #3730A3;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">
+                The SE AI Hub Playbook
+            </h1>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">
+                Your strategic guide to leveraging AI at every stage of the sales cycle to save time, deliver more value, and win more deals.
+            </p>
+        </div>
+        
+        <!-- Onboarding Section -->
+        <div class="bg-white p-6 rounded-lg border border-gray-200 mb-12 text-center">
+             <h2 class="text-xl font-bold text-gray-800">New to the Hub? Start Here.</h2>
+             <p class="mt-2 text-gray-600">This playbook is the best place to start. It connects our AI tools and prompts directly to your daily workflow, showing you exactly how and when to use them for maximum impact.</p>
+        </div>
+
+
+        <!-- Phases Section -->
+        <div class="space-y-12">
+
+            <!-- Phase 1: RFPs & RFIs -->
+            <div class="phase-card p-6 sm:p-8">
+                <div class="flex items-start gap-6">
+                    <div class="phase-number">1</div>
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                            <h2 class="text-2xl font-bold text-gray-900">RFPs & RFIs</h2>
+                            <div class="sf-stage-tag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block mr-1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                                <span>Prospecting</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mt-2">Efficiently qualify and respond to inbound requests for information and proposals.</p>
+                    </div>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Recommended Assistants:</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://chatgpt.com/g/g-67877ef5dc0c819183548f2a183a4ed2-hibob-rfp-helper-beta-updated-june-2025?model=gpt-4o" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">RFP Helper:</a> Get fast, consistent answers to RFP questions.</div></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://sites.google.com/hibob.io/se-ai-hub/assistant-pipeline" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Go/No-Go GPT (Coming Soon):</a> Analyze inbound opportunities against key criteria.</div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 2: Pre-Call Strategy & Research -->
+            <div class="phase-card p-6 sm:p-8">
+                <div class="flex items-start gap-6">
+                    <div class="phase-number">2</div>
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                            <h2 class="text-2xl font-bold text-gray-900">Pre-Call Strategy & Research</h2>
+                            <div class="sf-stage-tag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block mr-1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                                <span>Discovery</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mt-2">Walk into every discovery call with a deep understanding of the prospect's business, stakeholders, and likely challenges.</p>
+                    </div>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Recommended Assistants:</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-3">
+                                <svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg>
+                                <div><a href="https://chatgpt.com/g/g-67fe44c948008191b5434fd3eeaef6f9-deal-prep" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Deal Prep:</a> Your first stop for any new opportunity. Get a complete, automated brief by connecting to Salesforce and Gong.</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Key Prompts from the Library:</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Company & Persona Research Brief</a></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">LinkedIn Profile Stakeholder Brief</a></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Brainstorm Discovery Questions</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 3: Discovery & Solutioning -->
+            <div class="phase-card p-6 sm:p-8">
+                <div class="flex items-start gap-6">
+                    <div class="phase-number">3</div>
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                            <h2 class="text-2xl font-bold text-gray-900">Discovery & Solutioning</h2>
+                            <div class="sf-stage-tag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block mr-1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                                <span>Discovery & Evaluating</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mt-2">Map the prospect's pains directly to Bob's capabilities and build the foundation for a winning demo.</p>
+                    </div>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Recommended Assistants:</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://chatgpt.com/g/g-688104fc7c448191ac1365fc80aac1a2-deal-iq?model=gpt-4-1" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Deal IQ:</a> Get an unbiased, critical evaluation of deal health directly from the call transcript.</div></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://chatgpt.com/g/g-67e5681429008191a9d17ee45452642d-m2-metrics-question-master?model=gpt-4o" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">M2 Metrics Question Master:</a> Generate metric-focused questions to help build a strong business case.</div></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Key Prompts from the Library:</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Pain-to-Solution Mapping</a></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">"Day in the Life" Demo Narrative</a></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Custom Demo Data Generator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 4: Demo & Proof -->
+            <div class="phase-card p-6 sm:p-8">
+                <div class="flex items-start gap-6">
+                    <div class="phase-number">4</div>
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                            <h2 class="text-2xl font-bold text-gray-900">Demo & Proof</h2>
+                            <div class="sf-stage-tag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block mr-1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                                <span>Evaluating & Proof</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mt-2">Deliver a tailored, value-driven demo and handle any technical or competitive questions with confidence.</p>
+                    </div>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Recommended Assistants:</h3>
+                        <ul class="space-y-3 text-sm">
+                             <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://chatgpt.com/g/g-67fe44c948008191b5434fd3eeaef6f9-deal-prep?model=gpt-4o" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Deal Prep:</a> Re-engage and catch up on context before a big proof-of-concept call.</div></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://chatgpt.com/g/g-67e66f01ed548191a10d60ab17cf923c-bob-uk-payroll-sme?model=gpt-4o" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">UK Payroll SME / IAM Integrations SME:</a> Get fast, accurate answers to deep technical questions on the fly.</div></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://chatgpt.com/g/g-685947d5f7d88191862b006a4772ff2a-integration-architect" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Integration Architect:</a> Dynamically create client-facing technical architecture diagrams.</div></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Key Prompts from the Library:</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Tailored Demo Script Creator</a></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Competitive Battlecard Creator</a></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Objection Handling Matrix</a></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Integration Value Proposition</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 5: Post-Demo & Closing -->
+            <div class="phase-card p-6 sm:p-8">
+                <div class="flex items-start gap-6">
+                    <div class="phase-number">5</div>
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                            <h2 class="text-2xl font-bold text-gray-900">Post-Demo & Closing</h2>
+                            <div class="sf-stage-tag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block mr-1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                                <span>Evaluating & Proof</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mt-2">Maintain momentum, enable your champion, and ensure a smooth transition to post-sales teams.</p>
+                    </div>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Recommended Assistants:</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://chatgpt.com/g/g-6811f8d1be4081918d0fdb765618db2d-demo-follow-up-assistant" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Demo Follow-Up Assistant:</a> Extract action items and product gaps from Gong transcripts.</div></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://sites.google.com/hibob.io/se-ai-hub/assistant-pipeline" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Deal Handover Hub (Coming Soon):</a> Automate the administrative work of deal transition.</div></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Key Prompts from the Library:</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Draft Demo Follow-Up Email</a></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Champion Enablement Email (Power Play)</a></li>
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> <a href="https://sites.google.com/hibob.io/se-ai-hub/prompt-library" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Customer Story Extractor</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Phase 6: Deal Reviews & QBRs -->
+            <div class="phase-card p-6 sm:p-8">
+                <div class="flex items-start gap-6">
+                    <div class="phase-number">6</div>
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                            <h2 class="text-2xl font-bold text-gray-900">Deal Reviews & QBRs</h2>
+                            <div class="sf-stage-tag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block mr-1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                                <span>Evaluating & Proof</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mt-2">Provide data-driven insights for internal deal reviews and Quarterly Business Reviews (QBRs).</p>
+                    </div>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">Recommended Assistants:</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex gap-3"><svg class="w-5 h-5 text-pink-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 12h20"/><path d="M17.5 12V8a.5.5 0 0 0-.5-.5H7a.5.5 0 0 0-.5.5v4"/></svg> <div><a href="https://chatgpt.com/g/g-688104fc7c448191ac1365fc80aac1a2-deal-iq?model=gpt-4-1" target="_blank" class="font-medium text-pink-600 hover:underline resource-link">Deal IQ:</a> Provide an unbiased, data-driven evaluation of deal health for accurate forecasting.</div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Continuous Improvement -->
+            <div class="text-center border-t border-gray-200 pt-12 mt-12">
+                 <h2 class="text-2xl font-bold text-gray-900">Continuous Improvement</h2>
+                 <p class="mt-2 max-w-2xl mx-auto text-gray-600">The SE AI Hub is a living platform. Your feedback and ideas are what make it indispensable. Use the hub to request new tools, build your own, and share great prompts with the team.</p>
+            </div>
+
+        </div>
+    </main>
+    <script>
+        (function(){
+          // Use the same Web App URL you use for Roadmap votes
+          const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+        
+          // Generate (or read) a stable anonymous client ID per browser
+          window.SEHUB_CLIENT_ID = (function(){
+            const k='sehub.cid';
+            let v=localStorage.getItem(k);
+            if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
+              localStorage.setItem(k,v);
+            }
+            return v;
+          })();
+        
+          // Lightweight telemetry sender
+          window.sendTelemetry = function(page, action, itemId){
+            try {
+              fetch(WEB_APP_URL + '?route=telemetry', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
+                  action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
+                  itemId: itemId || '',// assistant id, prompt title, roadmap id
+                  clientId: window.SEHUB_CLIENT_ID,
+                  ua: navigator.userAgent
+                })
+              });
+            } catch (e) { /* fail silently */ }
+          };
+        })();
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function(){
+              // Log a page view when playbook.html loads
+              sendTelemetry('playbook','view');
+            
+              // Track clicks on any link with the class "resource-link"
+              document.querySelectorAll('a.resource-link').forEach(a => {
+                const label = a.textContent.trim();
+                a.addEventListener('click', () => sendTelemetry('playbook','launch_assistant', label));
+              });
+            });
+            </script>
+</body>
+</html>

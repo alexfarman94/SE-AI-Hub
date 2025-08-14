@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistants - SE AI Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --hibob-pink: #e6007e;
+            --hibob-burgundy: #6a0e29;
+            --hibob-light-pink: #fef6f8;
+            --hibob-dark-gray: #333333;
+            --hibob-bg: #f9f9fb;
+        }
+        body { font-family: 'Inter', sans-serif; color: var(--hibob-dark-gray); background-color: var(--hibob-bg); }
+        .bg-hibob-pink { background-color: var(--hibob-pink); }
+        .text-hibob-pink { color: var(--hibob-pink); }
+        .border-hibob-pink { border-color: var(--hibob-pink); }
+        .hover\:bg-hibob-pink-dark:hover { background-color: #c4006b; }
+        .bg-hibob-light-pink { background-color: var(--hibob-light-pink); }
+        .text-hibob-burgundy { color: var(--hibob-burgundy); }
+        
+        /* Card Flip Styling & Hover Effect */
+        .tool-card-container { perspective: 1000px; }
+        .tool-card {
+            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .tool-card.is-flipped { transform: rotateY(180deg); }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05);
+        }
+        .tool-card-container:hover .card-front:not(.is-flipped) {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .card-front .card-icon { transition: transform 0.3s ease; }
+        .tool-card-container:hover .card-icon { transform: scale(1.1) rotate(-5deg); }
+        .card-back { transform: rotateY(180deg); }
+
+        .status-live { background-color: var(--hibob-pink); color: white; }
+        .status-coming-soon { background-color: #6b7280; color: white; }
+        .filter-btn, .view-btn { transition: all 0.2s ease-in-out; }
+        .filter-btn.active, .view-btn.active { background-color: var(--hibob-pink); color: white; border-color: var(--hibob-pink); }
+        .modal-overlay { transition: opacity 0.3s ease; }
+        .modal-content { transition: transform 0.3s ease; }
+
+        /* Animation for filtering */
+        #tools-container { transition: opacity 0.3s ease-in-out; }
+        #tools-container.fade-out { opacity: 0; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <main class="container mx-auto p-6 md:p-8">
+        <div id="tools">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-2">AI Assistant Library</h2>
+                <p class="text-gray-600">Find the right tool to accelerate your workflow. Click 'Learn' for more info.</p>
+            </div>
+
+            <div class="mb-8 p-4 bg-white rounded-lg shadow-sm border space-y-4">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-search text-gray-400"></i></span>
+                    <input type="text" id="search-input" placeholder="Describe your task, e.g., 'prepare for a demo'..." class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hibob-pink">
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div id="filter-container" class="flex flex-wrap items-center gap-2"></div>
+                    <div class="flex-shrink-0">
+                        <div class="flex items-center">
+                            <button id="grid-view-btn" class="view-btn p-2 border rounded-l-md"><i class="fas fa-th-large"></i></button>
+                            <button id="list-view-btn" class="view-btn p-2 border-t border-b border-r rounded-r-md"><i class="fas fa-bars"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <div id="tools-container"></div>
+             <div id="no-results" class="text-center py-12 hidden">
+                <i class="fas fa-box-open text-4xl text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-semibold">No tools found</h3>
+                <p class="text-gray-500">Try adjusting your search or filter criteria.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white mt-12 py-6">
+        <div class="container mx-auto text-center text-gray-500">
+            <p>&copy; 2025 HiBob Sales Engineering. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="feedback-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50 opacity-0">
+        <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transform scale-95">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 id="modal-title" class="text-xl font-bold text-hibob-burgundy">Feedback & Suggestions</h3>
+                <button onclick="closeFeedbackModal()" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            </div>
+            <div class="p-6">
+                <form id="feedback-form">
+                    <input type="hidden" id="tool-name-input" name="entry.716004014">
+                    <label for="feedback-input" class="block text-sm font-medium text-gray-700 mb-2">Your Feedback:</label>
+                    <textarea id="feedback-input" name="entry.1181738603" rows="4" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hibob-pink text-sm" placeholder="What's working well? What could be improved?" required></textarea>
+                    <div class="flex justify-end mt-4">
+                        <button type="button" onclick="closeFeedbackModal()" class="bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 mr-2">Cancel</button>
+                        <button type="submit" class="bg-hibob-pink text-white font-bold py-2 px-4 rounded-lg hover:bg-hibob-pink-dark">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const aiTools = [
+                { id: 1, name: "Deal Prep", category: "Deal Management", icon: "fa-clipboard-list", author: "SE CoE", link: "https://chatgpt.com/g/g-67fe44c948008191b5434fd3eeaef6f9-se-briefing-assistant", status: "LIVE", whatItIs: "An AI co-pilot that generates a complete deal brief by connecting live to Salesforce and Gong.", whenToUse: ["Demo Planning", "Deal Reviews", "Manager Insights"], benefit: "Less manual review time and accelerated client context understanding.", useCases: ["Pre-demo discovery catch-up", "Re-engaging with a cold opportunity"], instructions: "Simply input the Salesforce account name. The GPT performs a live query on Salesforce and the 5 most recent Gong transcripts to generate a brief covering recent emails, stakeholders, pains, strategy, and current tools. The context is retained for follow-up questions.", integrations: ["Live Salesforce API", "Live Gong API"], related: [4, 7], keywords: ["demo", "prepare", "gong", "salesforce", "briefing"], videoUrl: "https://drive.google.com/file/d/1zCN83Io76aN7q9IDv4Knm8B-w_4E4UzM/preview" },
+                { id: 2, name: "RFP Helper", category: "RFP & Security", icon: "fa-shield-halved", author: "SE CoE & Proposals Team", link: "https://chatgpt.com/g/g-67877ef5dc0c819183548f2a183a4ed2-hibob-rfp-helper-beta", status: "LIVE", whatItIs: "An assistant trained on Loopio and SME knowledge to provide RFP-ready answers.", whenToUse: ["Answering RFPs", "Security Questionnaires", "Validating Capabilities"], benefit: "Reduces time spent on RFP questions and provides a consistent baseline for common answers.", useCases: ["Answering standard RFP questions", "Generating boilerplate security responses"], instructions: "Important: First, type in the account name for tracking purposes. Then, copy and paste questions one-by-one into the UI for an RFP-ready response. Always validate responses before submission. Note: Excludes Bob Finance and US Payroll/Benefits.", integrations: ["Loopio (trained on export)"], related: [6], keywords: ["rfp", "security", "questionnaire", "answer"], videoUrl: "https://drive.google.com/file/d/1VXjPu_VoOSzPLTYf9jRclPhExxJlKrsr/preview" },
+                { id: 4, name: "Demo Follow-Up Assistant", category: "Deal Management", icon: "fa-clipboard-check", author: "Liv Dowsett & Chris Brown", link: "https://chatgpt.com/g/g-6811f8d1be4081918d0fdb765618db2d-demo-follow-up-assistant", status: "LIVE", whatItIs: "An assistant that analyzes Gong transcripts to extract action items and product gaps.", whenToUse: ["Post-Demo Follow-up", "Capturing Product Feedback", "Ensuring No Questions Missed"], benefit: "Reduces the risk of missing requirements and supports better pre-sales product feedback.", useCases: ["Ensuring all demo questions are answered", "Identifying product gaps for feedback"], instructions: "Manually upload a Gong transcript. The assistant will analyze it to extract and tabulate: 1) Unanswered customer questions with recommended actions. 2) Explicit and implicit follow-up tasks for the deal team. 3) Product gaps formatted perfectly for Salesforce feedback intake.", integrations: ["Gong (manual upload)"], related: [1, 5], keywords: ["follow up", "questions", "gong", "summary"], videoUrl: "https://drive.google.com/file/d/1hIFJjMasT8PZPgGHHlpFaxefjynk-vH1/preview" },
+                { id: 7, name: "Deal IQ", category: "Deal Management", icon: "fa-search-dollar", author: "SE CoE", link: "https://chatgpt.com/g/g-688104fc7c448191ac1365fc80aac1a2-deal-iq", status: "LIVE", whatItIs: "A data-driven partner that provides an unbiased, critical evaluation of a deal's health from call transcripts.", whenToUse: ["Managerial Deal Reviews", "Pipeline Inspection", "Formulating Deal Strategy"], benefit: "Challenges assumptions and surfaces key data points to help sales leaders accurately assess deal health, identify technical criteria, and spot gaps.", useCases: ["Managerial deal reviews", "VP Sales pipeline inspection", "Pre-forecast deal scrubbing"], instructions: "Upload a raw Gong transcript. DealIQ acts as a skeptical co-pilot, generating an unbiased 'Deal Intelligence Brief' for sales leadership. The brief includes a critical executive summary, a deal health score, signature risk analysis, expansion opportunities, and a validation of the '3 Whys' strategic narrative, all grounded strictly in transcript evidence.", integrations: ["Gong (manual upload)"], related: [1, 4, 5], keywords: ["deal", "risk", "health", "forecast", "review", "gong", "transcript", "iq"], videoUrl: "https://drive.google.com/file/d/100HUEN8O6Y00lzWUgukGuof-Sw0mh_kD/preview" },
+                { id: 3, name: "Bob Demo Branding and Onboarding", category: "Demo Personalization", icon: "fa-palette", author: "Nic P", link: "https://chatgpt.com/g/g-679765d232688191aaee3f91a4818063-bob-branding-tool", status: "LIVE", whatItIs: "A corporate identity analyst that scrapes a prospect's website for branding assets and generates a new employee welcome message.", whenToUse: ["Personalizing Demo Environments", "Creating Onboarding Experiences"], benefit: "Instantly generates a full suite of branding assets and a new employee welcome package from a single URL.", useCases: ["Setting up a personalized demo environment", "Creating branded presentation materials"], instructions: "Provide a company website URL. The assistant will perform a comprehensive analysis to generate both branding/sales assets (logos, colors, leadership) and a new employee welcome message synthesized from the site's public content.", integrations: ["Web Scraping"], related: [1], keywords: ["brand", "logo", "color", "personalize", "demo", "onboarding"], videoUrl: "https://drive.google.com/file/d/1liKWC4wgVf-Mb3Tlywjty4e_LcafeC08/preview" },
+                { id: 5, name: "M2 Metrics Question Master", category: "Value Selling", icon: "fa-chart-line", author: "SE CoE", link: "https://chatgpt.com/g/g-67e5681429008191a9d17ee45452642d-m2-metrics-question-master", status: "LIVE", whatItIs: "A tool that generates insightful, metric-focused questions based on Gong transcripts.", whenToUse: ["Deepening Discovery", "Building Business Cases"], benefit: "Saves time on crafting great questions and helps build high-quality business cases.", useCases: ["Deepening discovery after a call", "Building a foundation for a business case"], instructions: "Upload a transcript file from Gong. The assistant will provide 10 contextual, metric-focused questions.", integrations: ["Gong (manual upload)"], related: [4], keywords: ["metrics", "value", "business case", "discovery"], videoUrl: "https://drive.google.com/file/d/1Rw8gzg0o79AgxM0wt2M_Q9BoNCGdZVO9/preview" },
+                { id: 6, name: "UK Payroll SME", category: "Product Expertise", icon: "fa-cogs", author: "SE CoE", link: "https://chatgpt.com/g/g-67e66f01ed548191a10d60ab17cf923c-bob-uk-payroll-sme", status: "LIVE", whatItIs: "A subject matter expert trained on Help Center docs for UK Payroll.", whenToUse: ["Answering Live Demo Questions", "RFP Questions"], benefit: "Improves product knowledge and allows for answering questions on the fly during demos.", useCases: ["Answering quick questions during a live demo", "Finding answers for UK Payroll RFP questions"], instructions: "Ask a question about UK Payroll functionality. The assistant is trained on Help Centre documentation.", integrations: ["Help Center (trained on export)"], related: [2], keywords: ["payroll", "technical", "uk", "sme"], videoUrl: "https://drive.google.com/file/d/15d45HXU1IjOLVXwrfw-h_76akA24qwss/preview" },
+                { id: 8, name: "Deal Handover Hub", category: "Automated Actions", icon: "fa-handshake", author: "SE CoE", link: null, status: "Coming Soon", whatItIs: "An automated experience in Salesforce that completes the handover questionnaire.", whenToUse: ["Post-Sale Transition", "Ensuring Data Consistency"], benefit: "Eliminates a manual and time-consuming process, freeing up SEs from post-sale administrative work.", useCases: ["Post-sale transition to Professional Services", "Ensuring data consistency between teams"], instructions: "This is a fully automated process within Salesforce. No action is required from the SE. The handover document will be generated and attached to the opportunity upon closing.", integrations: ["Salesforce", "Gong"], related: [1, 4], keywords: ["handover", "professional services", "automation", "salesforce"], videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                { id: 14, name: "Roadmap SME", category: "Product Expertise", icon: "fa-map", author: "Zach Jones", link: "https://notebooklm.google.com/notebook/09abd675-6ed9-4a62-808c-0e0dbe1de7cc", status: "LIVE", whatItIs: "A specialized assistant that provides instant visibility into the product roadmap.", whenToUse: ["Answering Client Roadmap Questions", "Validating Feature Timelines", "Internal Strategy Sessions"], benefit: "Get immediate, accurate answers to roadmap questions without having to find the latest presentation or ask the product team.", useCases: ["Quickly answering 'When is feature X planned?' during a customer call.", "Preparing for a QBR by understanding upcoming features."], instructions: "This assistant is powered by NotebookLM. Ask questions in natural language about product timelines and upcoming features.", integrations: ["NotebookLM"], related: [6, 11], keywords: ["roadmap", "product", "timeline", "feature"], videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                { id: 15, name: "IAM Integrations SME", category: "Product Expertise", icon: "fa-key", author: "Zach Jones", link: "https://notebooklm.google.com/notebook/09abd675-6ed9-4a62-808c-0e0dbe1de7cc", status: "LIVE", whatItIs: "A specialized assistant for answering technical questions about Identity and Access Management (IAM) integrations.", whenToUse: ["Security Reviews", "Technical Deep Dives", "Answering Integration RFPs"], benefit: "Provides fast, accurate answers to complex IAM and security questions, increasing SE confidence and speeding up technical validation.", useCases: ["Answering questions about SSO, SCIM, and user provisioning.", "Explaining our security posture for integrations."], instructions: "This assistant is powered by NotebookLM. Ask technical questions about our IAM capabilities and specific integrations.", integrations: ["NotebookLM"], related: [2, 6], keywords: ["iam", "sso", "scim", "okta", "azure", "security", "integration"], videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                { id: 16, name: "Sales Engineer Growth Guide", category: "SE Skills", icon: "fa-user-tie", author: "Brenden McGarrity", link: "https://chatgpt.com/g/g-686e7daae408819189885ff9166f97b5-sales-engineer-growth-guide", status: "LIVE", whatItIs: "A personal guide for SEs to foster skill growth through introspective self-assessment.", whenToUse: ["Career Development", "Skill Assessment", "Personal Growth"], benefit: "Provides a structured framework for introspective self-assessment and continuous skill improvement.", useCases: ["Preparing for a 1:1 with your manager.", "Building a personal development plan.", "Self-reflecting on core SE competencies."], instructions: "This assistant will guide you through a series of introspective questions to help you assess your skills and identify areas for growth.", integrations: ["ChatGPT"], related: [17], keywords: ["skills", "growth", "career", "development", "assessment"], videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                { id: 17, name: "SE Skills Assessment", category: "SE Skills", icon: "fa-tasks", author: "Yabrira", link: "https://yabrira.github.io/skills-assessment/", status: "LIVE", whatItIs: "An interactive tool to evaluate your discovery and demo skills against a defined framework.", whenToUse: ["Self-Assessment", "Identifying Growth Areas", "Preparing for Reviews"], benefit: "Receive a personalized coaching plan with clear strengths and development areas.", useCases: ["Evaluating your discovery and demo skills.", "Getting a personalized coaching plan.", "Downloading a PDF of your results for review."], instructions: "Rate your skills across the discovery and demo sections. The tool will calculate an average score and provide a detailed skill profile and coaching plan.", integrations: ["Web Application"], related: [16], keywords: ["skills", "assessment", "coaching", "discovery", "demo"], videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                { id: 18, name: "Integration Architect", category: "Solution Architecture", icon: "fa-sitemap", author: "Luc van der Voorn", links: { gpt: "https://chatgpt.com/g/g-685947d5f7d88191862b006a4772ff2a-integration-architect", app: "https://bobarch.vercel.app/" }, status: "LIVE", whatItIs: "A two-step tool that creates dynamic, client-facing technical architecture diagrams from call transcripts.", whenToUse: ["Technical Discovery", "Solution Design", "Client Architecture Meetings"], benefit: "Dramatically speeds up the creation of complex technical diagrams and ensures they are based on customer requirements.", useCases: ["Creating a future-state architecture diagram for a client meeting.", "Visualizing complex integration points for internal solutioning."], instructions: "1. Launch the GPT and upload a Gong transcript to generate a .json file. 2. Download the .json file. 3. Launch the Bob Arch App and upload the .json file to generate the dynamic diagram.", integrations: ["Gong (manual upload)", "Bob Arch App"], related: [15], keywords: ["architecture", "diagram", "technical", "integration", "json", "gong", "solution"], videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            ];
+            let activeFilter = 'All';
+            let currentView = localStorage.getItem('se-hub-view') || 'grid';
+
+            function init() {
+                renderFilters();
+                filterAndRenderTools();
+                setupEventListeners();
+                updateViewButtons();
+            }
+
+            function setupEventListeners() {
+                document.getElementById('search-input').addEventListener('keyup', filterAndRenderTools);
+                document.getElementById('feedback-form').addEventListener('submit', handleFeedbackSubmit);
+                document.getElementById('grid-view-btn').addEventListener('click', () => setView('grid'));
+                document.getElementById('list-view-btn').addEventListener('click', () => setView('list'));
+            }
+
+            function setView(view) {
+                currentView = view;
+                localStorage.setItem('se-hub-view', view);
+                updateViewButtons();
+                filterAndRenderTools();
+            }
+
+            function updateViewButtons() {
+                document.getElementById('grid-view-btn').classList.toggle('active', currentView === 'grid');
+                document.getElementById('list-view-btn').classList.toggle('active', currentView === 'list');
+            }
+
+            function renderFilters() {
+                const categories = ['All', ...new Set(aiTools.map(tool => tool.category))];
+                const container = document.getElementById('filter-container');
+                container.innerHTML = categories.map(category => `<button class="filter-btn px-3 py-1 border rounded-full text-sm font-semibold whitespace-nowrap ${category === 'All' ? 'active' : 'bg-white'}" data-category="${category}">${category}</button>`).join('');
+                container.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        container.querySelector('.filter-btn.active').classList.remove('active', 'bg-hibob-pink', 'text-white');
+                        btn.classList.add('active', 'bg-hibob-pink', 'text-white');
+                        activeFilter = btn.dataset.category;
+                        filterAndRenderTools();
+                    });
+                });
+            }
+
+            function filterAndRenderTools() {
+                const container = document.getElementById('tools-container');
+                container.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+                    const filteredTools = aiTools.filter(tool => {
+                        const matchesCategory = activeFilter === 'All' || tool.category === activeFilter;
+                        const searchString = `${tool.name} ${tool.purpose || tool.whatItIs} ${tool.author} ${tool.keywords.join(' ')}`.toLowerCase();
+                        const matchesSearch = searchTerm === '' || searchString.includes(searchTerm);
+                        return matchesCategory && matchesSearch;
+                    });
+                    renderTools(filteredTools);
+                    container.classList.remove('fade-out');
+                }, 300);
+            }
+
+            function renderTools(tools) {
+                const container = document.getElementById('tools-container');
+                const noResults = document.getElementById('no-results');
+                
+                if (currentView === 'grid') {
+                    container.className = 'grid md:grid-cols-2 lg:grid-cols-3 gap-8';
+                } else {
+                    container.className = 'space-y-4';
+                }
+
+                if (tools.length === 0) {
+                    container.innerHTML = '';
+                    noResults.classList.remove('hidden');
+                    return;
+                }
+
+                noResults.classList.add('hidden');
+                container.innerHTML = tools.map(tool => currentView === 'grid' ? renderGridItem(tool) : renderListItem(tool)).join('');
+            }
+            
+            function renderGridItem(tool) {
+                const relatedTools = (tool.related || []).map(id => aiTools.find(t => t.id === id)).filter(Boolean);
+                const statusClass = `status-${tool.status.toLowerCase().replace(/\s+/g, '-')}`;
+                
+                let launchButtons;
+                if (tool.links) { // Special case for two-link tool
+                    launchButtons = `
+  <a href="${tool.links.gpt}" target="_blank"
+     data-assistant="${tool.name}" data-launch-type="GPT"
+     onclick="sendTelemetry('live_assistants','launch_assistant', this.dataset.assistant + ' — ' + this.dataset.launchType)"
+     class="flex-1 text-center bg-gray-800 text-white font-bold py-2 px-3 rounded-lg hover:bg-gray-900 transition duration-300 block text-sm">
+     Launch GPT
+  </a>
+  <a href="${tool.links.app}" target="_blank"
+     data-assistant="${tool.name}" data-launch-type="App"
+     onclick="sendTelemetry('live_assistants','launch_assistant', this.dataset.assistant + ' — ' + this.dataset.launchType)"
+     class="flex-1 text-center bg-hibob-pink text-white font-bold py-2 px-3 rounded-lg hover:bg-hibob-pink-dark transition duration-300 block text-sm">
+     Launch App
+  </a>
+  <button onclick="flipCard(${tool.id})"
+     class="flex-1 text-center bg-white border border-gray-300 text-gray-700 font-bold py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-300 block text-sm">
+     Learn
+  </button>`;
+
+                } else if (tool.link) {
+                    launchButtons = `
+  <a href="${tool.link}" target="_blank"
+     data-assistant="${tool.name}" data-launch-type="Launch"
+     onclick="sendTelemetry('live_assistants','launch_assistant', this.dataset.assistant + ' — ' + this.dataset.launchType)"
+     class="flex-1 text-center bg-gray-800 text-white font-bold py-2 px-3 rounded-lg hover:bg-gray-900 transition duration-300 block">
+     Launch
+  </a>
+  <button onclick="flipCard(${tool.id})"
+     class="flex-1 text-center bg-white border border-gray-300 text-gray-700 font-bold py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-300 block">
+     Learn
+  </button>`;
+
+                } else {
+                    launchButtons = `<button class="flex-1 text-center bg-gray-400 text-white font-bold py-2 px-3 rounded-lg cursor-not-allowed" disabled>Coming Soon</button>
+                                    <button onclick="flipCard(${tool.id})" class="flex-1 text-center bg-white border border-gray-300 text-gray-700 font-bold py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-300 block">Learn</button>`;
+                }
+
+                return `
+                    <div class="tool-card-container h-[540px]">
+                        <div class="tool-card w-full h-full" id="card-${tool.id}">
+                            <div class="card-face card-front shadow-sm">
+                                <div class="p-6 flex-grow flex flex-col">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h3 class="font-bold text-xl text-hibob-burgundy flex items-center pr-2"><i class="fas ${tool.icon} mr-3 text-hibob-pink card-icon"></i>${tool.name}</h3>
+                                        <span class="text-xs font-semibold px-2 py-1 rounded-full ${statusClass} flex-shrink-0">${tool.status}</span>
+                                    </div>
+                                    <p class="text-gray-800 font-semibold text-sm">What it is:</p>
+                                    <p class="text-gray-600 mb-4 text-sm">${tool.whatItIs}</p>
+                                    <p class="text-gray-800 font-semibold text-sm">When to use it:</p>
+                                    <div class="flex flex-wrap gap-2 mb-4">${tool.whenToUse.map(uc => `<span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">${uc}</span>`).join('')}</div>
+                                    <div class="bg-hibob-light-pink p-3 rounded-lg">
+                                        <p class="text-hibob-burgundy text-sm"><i class="fas fa-user-tie mr-2 text-hibob-pink"></i><strong>Benefit for You:</strong> ${tool.benefit}</p>
+                                    </div>
+                                    <div class="flex-grow"></div>
+                                </div>
+                                <div class="p-4 bg-gray-50 border-t">
+                                    <p class="text-xs text-center text-gray-500 mb-3">Thanks to: <strong>${tool.author}</strong></p>
+                                    <div class="flex gap-2">
+                                        ${launchButtons}
+                                    </div>
+                                     <button onclick="openFeedbackModal(${tool.id})" class="mt-2 w-full text-center bg-white border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-100 transition duration-300 block text-sm">
+                                        <i class="fas fa-comment-dots mr-2"></i> Feedback & Suggestions
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-face card-back shadow-sm">
+                                <div class="p-6 flex-grow overflow-y-auto">
+                                    <h4 class="font-bold text-lg text-hibob-burgundy mb-2">Watch Demo</h4>
+                                    <div class="aspect-w-16 aspect-h-9 mb-4">
+                                        <iframe src="${tool.videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-lg"></iframe>
+                                    </div>
+                                    <h4 class="font-bold text-lg text-hibob-burgundy mb-2">How it Works</h4>
+                                    <p class="text-sm text-gray-600 mb-4">${tool.instructions}</p>
+                                    <h4 class="font-bold text-lg text-hibob-burgundy mb-2">Integrations</h4>
+                                    <div class="flex flex-wrap gap-2">${tool.integrations.map(i => `<span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">${i}</span>`).join('')}</div>
+                                </div>
+                                <div class="p-4 bg-gray-50 border-t">
+                                    <button onclick="flipCard(${tool.id})" class="w-full text-center bg-gray-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-900 transition duration-300 block">
+                                        <i class="fas fa-arrow-left mr-2"></i> Back to Summary
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            function renderListItem(tool) {
+                let launchButton;
+                if (tool.links) { // Special case for two-link tool
+                    launchButton = `
+  <a href="${tool.links.gpt}" target="_blank"
+     data-assistant="${tool.name}" data-launch-type="GPT"
+     onclick="sendTelemetry('live_assistants','launch_assistant', this.dataset.assistant + ' — ' + this.dataset.launchType)"
+     class="text-center bg-gray-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-900 transition duration-300">GPT</a>
+  <a href="${tool.links.app}" target="_blank"
+     data-assistant="${tool.name}" data-launch-type="App"
+     onclick="sendTelemetry('live_assistants','launch_assistant', this.dataset.assistant + ' — ' + this.dataset.launchType)"
+     class="text-center bg-hibob-pink text-white font-bold py-2 px-4 rounded-lg hover:bg-hibob-pink-dark transition duration-300">App</a>`;
+
+                } else if (tool.link) {
+                    launchButton = `
+  <a href="${tool.link}" target="_blank"
+     data-assistant="${tool.name}" data-launch-type="Launch"
+     onclick="sendTelemetry('live_assistants','launch_assistant', this.dataset.assistant + ' — ' + this.dataset.launchType)"
+     class="text-center bg-gray-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-900 transition duration-300">Launch</a>`;
+
+                } else {
+                    launchButton = `<button class="text-center bg-gray-400 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed" disabled>Coming Soon</button>`;
+                }
+
+                return `
+                    <div class="bg-white rounded-lg shadow-sm border p-4 flex flex-col md:flex-row items-center gap-4">
+                        <div class="flex-shrink-0 text-center md:text-left">
+                            <i class="fas ${tool.icon} text-2xl text-hibob-pink w-10 text-center"></i>
+                        </div>
+                        <div class="flex-grow text-center md:text-left">
+                            <h3 class="font-bold text-lg text-hibob-burgundy">${tool.name}</h3>
+                            <p class="text-sm text-gray-600">${tool.whatItIs}</p>
+                            <p class="text-xs text-gray-500 mt-1">Thanks to: <strong>${tool.author}</strong></p>
+                        </div>
+                        <div class="flex-shrink-0 flex items-center gap-2">
+                            ${launchButton}
+                            <button onclick="openFeedbackModal(${tool.id})" class="text-center bg-white border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-100 transition duration-300">
+                                <i class="fas fa-comment-dots"></i>
+                            </button>
+                        </div>
+                    </div>`;
+            }
+            
+            window.flipCard = function(toolId) {
+                document.getElementById(`card-${toolId}`).classList.toggle('is-flipped');
+            }
+
+            window.openFeedbackModal = function(toolId) {
+                const tool = aiTools.find(t => t.id === toolId);
+                const modal = document.getElementById('feedback-modal');
+                const title = document.getElementById('modal-title');
+                
+                title.textContent = `Feedback for: ${tool.name}`;
+                document.getElementById('tool-name-input').value = tool.name;
+                document.getElementById('feedback-input').value = '';
+
+                modal.classList.remove('hidden', 'opacity-0');
+                modal.querySelector('.modal-content').classList.remove('scale-95');
+            }
+
+            window.closeFeedbackModal = function() {
+                const modal = document.getElementById('feedback-modal');
+                modal.classList.add('opacity-0');
+                modal.querySelector('.modal-content').classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+
+            function handleFeedbackSubmit(e) {
+                e.preventDefault();
+                const form = e.target;
+                const toolName = document.getElementById('tool-name-input').value;
+                const feedback = document.getElementById('feedback-input').value;
+                
+                const baseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfCIomF2OnJ5qgv1PQ76IcDbCSaJalN5P30ELMotXkVsltslw/viewform";
+                const params = new URLSearchParams();
+                params.append("entry.716004014", toolName);
+                params.append("entry.1181738603", feedback);
+                
+                const finalUrl = `${baseUrl}?${params.toString()}`;
+                
+                window.open(finalUrl, '_blank');
+                
+                closeFeedbackModal();
+                alert("Please complete the submission in the new tab that has opened.");
+            }
+            
+            init();
+        });
+    </script>
+          <script>
+(function(){
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+
+  // Stable anonymous client id
+  window.SEHUB_CLIENT_ID = (function(){
+    const k='sehub.cid';
+    let v=localStorage.getItem(k);
+    if(!v){ v=(crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random(); localStorage.setItem(k,v); }
+    return v;
+  })();
+
+  // Ask server who I am (Workspace email); cache it locally
+  (async function identify(){
+    try {
+      const r = await fetch(WEB_APP_URL + '?route=whoami', { credentials: 'include' });
+      const j = await r.json();
+      if (j && j.email) localStorage.setItem('sehub.email', j.email);
+    } catch(e) { /* ignore */ }
+  })();
+
+  // Lightweight telemetry sender (no CORS preflight; server accepts email from client)
+  window.sendTelemetry = function(page, action, itemId){
+    try {
+      navigator.sendBeacon(
+        WEB_APP_URL + '?route=telemetry',
+        new Blob([
+          JSON.stringify({
+            page, action, itemId: itemId||'',
+            clientId: window.SEHUB_CLIENT_ID,
+            email: localStorage.getItem('sehub.email') || '',
+            ua: navigator.userAgent
+          })
+        ], { type: 'text/plain' }) // use text/plain to avoid preflight
+      );
+    } catch (e) { /* silent */ }
+  };
+})();
+</script>
+</body>
+</html>
