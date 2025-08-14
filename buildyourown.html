@@ -296,48 +296,42 @@
     </main>
 
     <script>
+        // This top section handles the page-specific logic (Tabs and Copy Button)
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Tab Functionality ---
             const tabGpt = document.getElementById('tab-gpt');
             const tabGemini = document.getElementById('tab-gemini');
             const contentGpt = document.getElementById('content-gpt');
             const contentGemini = document.getElementById('content-gemini');
-
+    
             tabGpt.addEventListener('click', () => {
-                tabGpt.classList.add('active', 'text-pink-600');
-                tabGemini.classList.remove('active', 'text-pink-600');
+                tabGpt.classList.add('active');
+                tabGemini.classList.remove('active');
                 contentGpt.classList.remove('hidden');
                 contentGemini.classList.add('hidden');
             });
-
+    
             tabGemini.addEventListener('click', () => {
-                tabGemini.classList.add('active', 'text-pink-600');
-                tabGpt.classList.remove('active', 'text-pink-600');
+                tabGemini.classList.add('active');
+                tabGpt.classList.remove('active');
                 contentGemini.classList.remove('hidden');
                 contentGpt.classList.add('hidden');
             });
-
-            // --- Copy Button Functionality ---
+    
             const setupCopyButton = (buttonId, textElementId) => {
                 const button = document.getElementById(buttonId);
                 const textElement = document.getElementById(textElementId);
                 if (!button || !textElement) return;
-
+    
                 const copyIcon = button.querySelector('.copy-icon');
                 const checkIcon = button.querySelector('.check-icon');
                 const buttonText = button.querySelector('.button-text');
-
+    
                 button.addEventListener('click', () => {
-                    // Use the hidden pre tag for copying raw text
+                    // Telemetry call for the copy action
+                    sendTelemetry('build', 'copy_prompt', 'Prompt Architect Meta-Prompt');
+    
                     const textToCopy = textElement.innerText;
-                    const textArea = document.createElement('textarea');
-                    textArea.value = textToCopy;
-                    textArea.style.position = 'fixed';
-                    textArea.style.top = '-9999px';
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
+                    navigator.clipboard.writeText(textToCopy).then(() => {
                         button.classList.add('copied');
                         copyIcon.classList.add('hidden');
                         checkIcon.classList.remove('hidden');
@@ -348,49 +342,55 @@
                             checkIcon.classList.add('hidden');
                             buttonText.textContent = 'Copy';
                         }, 2000);
-                    } catch (err) {
+                    }).catch(err => {
                         console.error('Copy failed', err);
-                    }
-                    document.body.removeChild(textArea);
+                    });
                 });
             };
-
+    
             setupCopyButton('copy-btn-meta', 'meta-prompt');
         });
-    </script>
-<script>
-    (function(){
-      // Use the same Web App URL you use for Roadmap votes
-      const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
     
-      // Generate (or read) a stable anonymous client ID per browser
-      window.SEHUB_CLIENT_ID = (function(){
-        const k='sehub.cid';
-        let v=localStorage.getItem(k);
-        if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
-          localStorage.setItem(k,v);
-        }
-        return v;
-      })();
+        // This bottom section is the CORRECTED telemetry script
+        (function(){
+          const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
     
-      // Lightweight telemetry sender
-      window.sendTelemetry = function(page, action, itemId){
-        try {
-          fetch(WEB_APP_URL + '?route=telemetry', {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
-              action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
-              itemId: itemId || '',// assistant id, prompt title, roadmap id
-              clientId: window.SEHUB_CLIENT_ID,
-              ua: navigator.userAgent
-            })
+          window.SEHUB_CLIENT_ID = (function(){
+            const k='sehub.cid';
+            let v=localStorage.getItem(k);
+            if(!v){ v=(crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random(); localStorage.setItem(k,v); }
+            return v;
+          })();
+    
+          (async function identify(){
+            try {
+              const r = await fetch(WEB_APP_URL + '?route=whoami', { credentials: 'include' });
+              const j = await r.json();
+              if (j && j.email) localStorage.setItem('sehub.email', j.email);
+            } catch(e) { /* ignore */ }
+          })();
+    
+          window.sendTelemetry = function(page, action, itemId){
+            try {
+              navigator.sendBeacon(
+                WEB_APP_URL + '?route=telemetry',
+                new Blob([
+                  JSON.stringify({
+                    page, action, itemId: itemId||'',
+                    clientId: window.SEHUB_CLIENT_ID,
+                    email: localStorage.getItem('sehub.email') || '', // Includes email with every event
+                    ua: navigator.userAgent
+                  })
+                ], { type: 'text/plain' })
+              );
+            } catch (e) { /* silent */ }
+          };
+    
+          // Send the initial page view
+          document.addEventListener('DOMContentLoaded', function(){
+              sendTelemetry('build','view');
           });
-        } catch (e) { /* fail silently */ }
-      };
-    })();
+        })();
     </script>
 </body>
 </html>

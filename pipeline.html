@@ -68,11 +68,10 @@
     </footer>
 
     <script>
+        // This top section handles the roadmap and voting logic
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Live Web App URL ---
             const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
-
-            // --- Data Definitions (Static part) ---
+    
             let roadmapItems = [
                 { id: 1, title: "Go/No-Go GPT", status: "In Development", description: "An evolution of the RFP Analyzer. This enhanced GPT will analyze inbound opportunities against a refined set of criteria, including technical red flags, competitive landscape, and alignment with ideal customer profile to provide a more robust Go/No-Go recommendation.", category: "Opportunity Qualification", voted: false, votes: 0 },
                 { id: 3, title: "Deal Risk Analysis", status: "Ideation", description: "Provides a critical, data-driven view of any active opportunity. Scrutinizes Salesforce data and call transcripts to identify key risks (e.g., no economic buyer, weak champion, competitor mentions) and provides a risk score with actionable mitigation suggestions.", category: "Deal Execution", voted: false, votes: 0 },
@@ -82,8 +81,7 @@
                 { id: 7, title: "Manager Coaching Assistant", status: "Ideation", description: "A coaching tool for SE Managers. Get a high-level summary of your team's performance metrics from Gong, identify coaching opportunities, and get suggestions for 1:1 topics based on recent deal activities.", category: "Team Enablement", voted: false, votes: 0 },
                 { id: 8, title: "Automated Win Plan Creation", status: "Ideation", description: "A workflow automation that triggers when a new opportunity is created in Salesforce. It will auto-generate a standardized 'Win Plan' document in Notion, pre-populated with key deal information, ready for the SE to begin their strategy.", category: "Workflow Automation", voted: false, votes: 0 },
             ];
-
-            // --- Roadmap & Voting Logic ---
+    
             async function fetchVotes() {
                 if (WEB_APP_URL.includes('PASTE_YOUR_URL')) {
                     console.error("Please update the WEB_APP_URL in the script.");
@@ -93,32 +91,24 @@
                 try {
                     const response = await fetch(WEB_APP_URL);
                     const voteData = await response.json();
-                    
                     roadmapItems.forEach(item => {
                         const data = voteData.find(d => d.Item === item.title);
-                        if (data) {
-                            item.votes = parseInt(data.Votes, 10) || 0;
-                        } else {
-                            item.votes = 0;
-                        }
+                        item.votes = data ? (parseInt(data.Votes, 10) || 0) : 0;
                     });
-
                 } catch (error) {
                     console.error("Error fetching votes:", error);
                 }
                 loadLocalVotes();
                 renderRoadmap();
             }
-
+    
             function loadLocalVotes() {
                 const localVotes = JSON.parse(localStorage.getItem('hibob-se-ai-local-votes') || '{}');
                 roadmapItems.forEach(item => {
-                    if (localVotes[item.id]) {
-                        item.voted = true;
-                    }
+                    if (localVotes[item.id]) item.voted = true;
                 });
             }
-
+    
             function saveLocalVote(itemId) {
                 const localVotes = JSON.parse(localStorage.getItem('hibob-se-ai-local-votes') || '{}');
                 localVotes[itemId] = true;
@@ -128,12 +118,15 @@
             window.handleVote = async function(itemId) {
                 const item = roadmapItems.find(i => i.id === itemId);
                 if (!item || item.voted) return;
-
+    
+                // Telemetry call for the vote action
+                sendTelemetry('roadmap', 'vote', item.title);
+    
                 item.votes++;
                 item.voted = true;
                 saveLocalVote(itemId);
                 renderRoadmap();
-
+    
                 try {
                     await fetch(WEB_APP_URL, {
                         method: 'POST',
@@ -145,19 +138,15 @@
                     console.error("Error submitting vote:", error);
                 }
             }
-
+    
             function renderRoadmap() {
                 const container = document.getElementById('roadmap-container');
                 if (!container) return;
-
                 roadmapItems.sort((a, b) => b.votes - a.votes);
                 const maxVotes = Math.max(...roadmapItems.map(item => item.votes), 25);
-
                 container.innerHTML = roadmapItems.map(item => {
-                    const hasVoted = item.voted;
                     const votePercentage = (item.votes / maxVotes) * 100;
                     const statusClass = `status-${item.status.toLowerCase().replace(' ', '-')}`;
-
                     return `
                         <div class="roadmap-card bg-white rounded-lg shadow-sm p-6">
                             <div class="flex flex-col sm:flex-row justify-between items-start">
@@ -174,8 +163,8 @@
                                         <div class="text-3xl font-bold">${item.votes}</div>
                                         <div class="text-sm text-gray-500">VOTES</div>
                                     </div>
-                                    <button class="vote-btn border-2 border-hibob-pink text-hibob-pink font-bold py-2 px-4 rounded-full ${hasVoted ? 'voted' : ''}" onclick="handleVote(${item.id})" ${hasVoted ? 'disabled' : ''}>
-                                        <i class="fas fa-arrow-up mr-2"></i> ${hasVoted ? 'Voted' : 'Vote'}
+                                    <button class="vote-btn border-2 border-hibob-pink text-hibob-pink font-bold py-2 px-4 rounded-full ${item.voted ? 'voted' : ''}" onclick="handleVote(${item.id})" ${item.voted ? 'disabled' : ''}>
+                                        <i class="fas fa-arrow-up mr-2"></i> ${item.voted ? 'Voted' : 'Vote'}
                                     </button>
                                 </div>
                             </div>
@@ -191,45 +180,47 @@
             
             fetchVotes();
         });
-    </script>
-    <script>
+    
+        // This bottom section is the CORRECTED telemetry script
         (function(){
-          // Use the same Web App URL you use for Roadmap votes
           const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
-        
-          // Generate (or read) a stable anonymous client ID per browser
+    
           window.SEHUB_CLIENT_ID = (function(){
             const k='sehub.cid';
             let v=localStorage.getItem(k);
-            if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
-              localStorage.setItem(k,v);
-            }
+            if(!v){ v=(crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random(); localStorage.setItem(k,v); }
             return v;
           })();
-        
-          // Lightweight telemetry sender
+    
+          (async function identify(){
+            try {
+              const r = await fetch(WEB_APP_URL + '?route=whoami', { credentials: 'include' });
+              const j = await r.json();
+              if (j && j.email) localStorage.setItem('sehub.email', j.email);
+            } catch(e) { /* ignore */ }
+          })();
+    
           window.sendTelemetry = function(page, action, itemId){
             try {
-              fetch(WEB_APP_URL + '?route=telemetry', {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
-                  action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
-                  itemId: itemId || '',// assistant id, prompt title, roadmap id
-                  clientId: window.SEHUB_CLIENT_ID,
-                  ua: navigator.userAgent
-                })
-              });
-            } catch (e) { /* fail silently */ }
+              navigator.sendBeacon(
+                WEB_APP_URL + '?route=telemetry',
+                new Blob([
+                  JSON.stringify({
+                    page, action, itemId: itemId||'',
+                    clientId: window.SEHUB_CLIENT_ID,
+                    email: localStorage.getItem('sehub.email') || '', // Includes email with every event
+                    ua: navigator.userAgent
+                  })
+                ], { type: 'text/plain' })
+              );
+            } catch (e) { /* silent */ }
           };
-        })();
-        </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function(){
+    
+          // Send the initial page view
+          document.addEventListener('DOMContentLoaded', function(){
               sendTelemetry('roadmap','view');
-            });
-            </script>
+          });
+        })();
+    </script>
 </body>
 </html>

@@ -182,28 +182,74 @@
         </section>
     </main>
     <script>
-        (function(){
-          // ---- CONFIG ----
-          // Reuse the same Web App URL used on the Roadmap page
-          const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
-          // Optional: if your Sheet stores nice display names separately from Item, map them here:
-          const DESCRIPTIONS = {
-            'Go/No-Go GPT': 'An evolution of the RFP Analyzer to provide a robust Go/No-Go recommendation.',
-            'Deal Risk Analysis': 'Data-driven risks & mitigation suggestions from transcripts and CRM.',
-            'Bob Brain GPT': 'Unified Q&A across Salesforce, Gong, Help Center & Community.'
+      // This top section handles the "Top Community Request" feature
+      (function(){
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+        const DESCRIPTIONS = {
+          'Go/No-Go GPT': 'An evolution of the RFP Analyzer to provide a robust Go/No-Go recommendation.',
+          'Deal Risk Analysis': 'Data-driven risks & mitigation suggestions from transcripts and CRM.',
+          'Bob Brain GPT': 'Unified Q&A across Salesforce, Gong, Help Center & Community.'
+        };
+        const votedKey = 'hibob-se-ai-local-votes';
+        let top = null;
+        const $title = document.getElementById('top-title');
+        const $desc  = document.getElementById('top-desc');
+        const $votes = document.getElementById('top-votes');
+        const $btn   = document.getElementById('vote-btn');
+  
+        async function fetchTop(){
+          const res = await fetch(WEB_APP_URL);
+          const rows = await res.json();
+          if (!Array.isArray(rows) || rows.length === 0) throw new Error('empty');
+          rows.sort((a,b)=> (toNum(b.Votes) - toNum(a.Votes)) || String(a.Item).localeCompare(String(b.Item)));
+          top = rows[0];
+          top._title = String(top.Item || 'Top Community Request');
+          top._votes = toNum(top.Votes);
+          top._desc  = DESCRIPTIONS[top._title] || 'Popular request from the team.';
+          return top;
+        }
+  
+        function render(){
+          if (!top) return;
+          const alreadyVoted = readLocal(top._title);
+          $title.textContent = top._title;
+          $desc.textContent  = top._desc;
+          $votes.textContent = top._votes;
+          setBtnState(alreadyVoted);
+          $btn.onclick = async function(){
+            if (readLocal(top._title)) return;
+            const prev = top._votes;
+            top._votes += 1;
+            $votes.textContent = String(top._votes);
+            setBtnState(true);
+            writeLocal(top._title);
+            try {
+              await fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item: top._title })
+              });
+            } catch (e){ console.warn('Vote POST failed (network). UI left optimistic.', e); }
           };
-        
-          // ---- STATE ----
-          const votedKey = 'hibob-se-ai-local-votes'; // same pattern as roadmap page
-          let top = null; // { Item, Votes }
-        
-          // ---- DOM ----
-          const $title = document.getElementById('top-title');
-          const $desc  = document.getElementById('top-desc');
-          const $votes = document.getElementById('top-votes');
-          const $btn   = document.getElementById('vote-btn');
-        
-          // ---- INIT ----
+        }
+  
+        function toNum(v){ const n = parseInt(v,10); return isNaN(n) ? 0 : n; }
+        function readLocal(id){ try { return JSON.parse(localStorage.getItem(votedKey)||'{}')[id]; } catch { return false; } }
+        function writeLocal(id){ try { const map = JSON.parse(localStorage.getItem(votedKey)||'{}'); map[id]=true; localStorage.setItem(votedKey, JSON.stringify(map)); } catch {} }
+        function setBtnState(v){
+          $btn.disabled = !!v;
+          if (v){
+            $btn.classList.add('bg-pink-600','text-white');
+            $btn.textContent = 'Voted';
+          } else {
+            $btn.classList.remove('bg-pink-600','text-white');
+            $btn.textContent = '▲ Vote';
+          }
+        }
+  
+        // Initial Fetch
+        if ($title) {
           fetchTop().then(render).catch(err => {
             console.error('Failed to fetch votes', err);
             $title.textContent = 'Top Community Request';
@@ -211,118 +257,53 @@
             $votes.textContent = '–';
             $btn.disabled = true;
           });
-        
-          // ---- FUNCTIONS ----
-          async function fetchTop(){
-            const res = await fetch(WEB_APP_URL); // GET returns JSON array of rows
-            const rows = await res.json();        // [{ Item: '...', Votes: 12 }, ...]
-            if (!Array.isArray(rows) || rows.length === 0) throw new Error('empty');
-            // Find max Votes (numeric)
-            rows.sort((a,b)=> (toNum(b.Votes) - toNum(a.Votes)) || String(a.Item).localeCompare(String(b.Item)));
-            top = rows[0];
-            // Attach display fields
-            top._title = String(top.Item || 'Top Community Request');
-            top._votes = toNum(top.Votes);
-            top._desc  = DESCRIPTIONS[top._title] || 'Popular request from the team.';
-            return top;
-          }
-        
-          function render(){
-            const alreadyVoted = readLocal(top._title);
-            $title.textContent = top._title;
-            $desc.textContent  = top._desc;
-            $votes.textContent = top._votes;
-            setBtnState(alreadyVoted);
-        
-            $btn.onclick = async function(){
-              if (readLocal(top._title)) return;
-              // optimistic UI
-              const prev = top._votes;
-              top._votes += 1;
-              $votes.textContent = String(top._votes);
-              setBtnState(true);
-              writeLocal(top._title);
-        
-              try {
-                // Apps Script POST; many deployments require no-cors
-                await fetch(WEB_APP_URL, {
-                  method: 'POST',
-                  mode: 'no-cors', // prevents CORS errors on Sites; we trust optimistic update
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ item: top._title }) // matches doPost schema
-                });
-              } catch (e){
-                console.warn('Vote POST failed (network). UI left optimistic.', e);
-                // Optional rollback if you prefer strictness:
-                // top._votes = prev; $votes.textContent = String(prev); setBtnState(false); removeLocal(top._title);
-              }
-            };
-          }
-        
-          // ---- helpers ----
-          function toNum(v){ const n = parseInt(v,10); return isNaN(n) ? 0 : n; }
-          function readLocal(id){ try { return JSON.parse(localStorage.getItem(votedKey)||'{}')[id]; } catch { return false; } }
-          function writeLocal(id){ try { const map = JSON.parse(localStorage.getItem(votedKey)||'{}'); map[id]=true; localStorage.setItem(votedKey, JSON.stringify(map)); } catch {}
-          }
-          function removeLocal(id){ try { const map = JSON.parse(localStorage.getItem(votedKey)||'{}'); delete map[id]; localStorage.setItem(votedKey, JSON.stringify(map)); } catch {}
-          }
-          function setBtnState(v){
-            $btn.disabled = !!v;
-            if (v){
-              $btn.classList.add('bg-pink-600','text-white');
-              $btn.textContent = 'Voted';
-            } else {
-              $btn.classList.remove('bg-pink-600','text-white');
-              $btn.textContent = '▲ Vote';
-            }
-          }
+        }
+      })();
+  
+      // This bottom section is the CORRECTED telemetry script
+      (function(){
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+  
+        window.SEHUB_CLIENT_ID = (function(){
+          const k='sehub.cid';
+          let v=localStorage.getItem(k);
+          if(!v){ v=(crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random(); localStorage.setItem(k,v); }
+          return v;
         })();
-        </script>
-        <script>
-            (function(){
-              // Use the same Web App URL you use for Roadmap votes
-              const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
-            
-              // Generate (or read) a stable anonymous client ID per browser
-              window.SEHUB_CLIENT_ID = (function(){
-                const k='sehub.cid';
-                let v=localStorage.getItem(k);
-                if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
-                  localStorage.setItem(k,v);
-                }
-                return v;
-              })();
-            
-              // Lightweight telemetry sender
-              window.sendTelemetry = function(page, action, itemId){
-                try {
-                  fetch(WEB_APP_URL + '?route=telemetry', {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
-                      action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
-                      itemId: itemId || '',// assistant id, prompt title, roadmap id
-                      clientId: window.SEHUB_CLIENT_ID,
-                      ua: navigator.userAgent
-                    })
-                  });
-                } catch (e) { /* fail silently */ }
-              };
-            })();
-            </script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function(){
-                  // Page view
-                  sendTelemetry('home', 'view');
-                
-                  // Track clicks on Quick Link cards
-                  document.querySelectorAll('a.quick-link-card').forEach(a => {
-                    const title = (a.querySelector('h3')||{}).textContent || 'quick_link';
-                    a.addEventListener('click', ()=> sendTelemetry('home','launch_assistant', title));
-                  });
-                });
-                </script>
+  
+        (async function identify(){
+          try {
+            const r = await fetch(WEB_APP_URL + '?route=whoami', { credentials: 'include' });
+            const j = await r.json();
+            if (j && j.email) localStorage.setItem('sehub.email', j.email);
+          } catch(e) { /* ignore */ }
+        })();
+  
+        window.sendTelemetry = function(page, action, itemId){
+          try {
+            navigator.sendBeacon(
+              WEB_APP_URL + '?route=telemetry',
+              new Blob([
+                JSON.stringify({
+                  page, action, itemId: itemId||'',
+                  clientId: window.SEHUB_CLIENT_ID,
+                  email: localStorage.getItem('sehub.email') || '', // Includes email with every event
+                  ua: navigator.userAgent
+                })
+              ], { type: 'text/plain' })
+            );
+          } catch (e) { /* silent */ }
+        };
+  
+        // This section handles page-specific event listeners
+        document.addEventListener('DOMContentLoaded', function(){
+          sendTelemetry('home', 'view'); // Page view
+          document.querySelectorAll('a.quick-link-card').forEach(a => {
+            const title = (a.querySelector('h3')||{}).textContent || 'quick_link';
+            a.addEventListener('click', ()=> sendTelemetry('home','launch_assistant', title));
+          });
+        });
+      })();
+  </script>
 </body>
 </html>

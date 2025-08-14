@@ -335,16 +335,15 @@ The output should be a short paragraph that follows the "Challenge, Solution, Re
         </div>
 
     </main>
-
     <script>
+        // This top section handles the filter and search logic for the page
         document.addEventListener('DOMContentLoaded', () => {
             const filterContainer = document.getElementById('filter-container');
             const searchInput = document.getElementById('search-input');
             const promptGrid = document.getElementById('prompt-grid');
             const promptCards = Array.from(promptGrid.children);
             const noResults = document.getElementById('no-results');
-
-            // --- Filter Logic ---
+    
             let currentFilter = 'all';
             filterContainer.addEventListener('click', (e) => {
                 if (e.target.tagName === 'BUTTON') {
@@ -357,25 +356,22 @@ The output should be a short paragraph that follows the "Challenge, Solution, Re
                     }
                 }
             });
-
-            // --- Search Logic ---
+    
             let searchTerm = '';
             searchInput.addEventListener('input', (e) => {
                 searchTerm = e.target.value.toLowerCase();
                 applyFilters();
             });
-
-            // --- Combined Filter and Search Function ---
+    
             function applyFilters() {
                 let resultsFound = false;
                 promptCards.forEach(card => {
                     const category = card.dataset.category;
                     const keywords = card.dataset.keywords;
                     const title = card.querySelector('h3').textContent.toLowerCase();
-                    
                     const categoryMatch = currentFilter === 'all' || category === currentFilter;
                     const searchMatch = keywords.toLowerCase().includes(searchTerm) || title.includes(searchTerm);
-
+    
                     if (categoryMatch && searchMatch) {
                         card.classList.remove('hidden');
                         resultsFound = true;
@@ -385,130 +381,56 @@ The output should be a short paragraph that follows the "Challenge, Solution, Re
                 });
                 noResults.classList.toggle('hidden', resultsFound);
             }
-
-            // --- Copy Button Functionality ---
-            document.body.addEventListener('click', (e) => {
-                if (e.target.classList.contains('copy-button')) {
-                    const button = e.target;
-                    const promptText = button.nextElementSibling.innerText;
-                    
-                    // Create a temporary textarea to hold the text
-                    const textArea = document.createElement('textarea');
-                    textArea.value = promptText;
-                    
-                    // Make the textarea invisible
-                    textArea.style.position = 'fixed';
-                    textArea.style.top = '-9999px';
-                    textArea.style.left = '-9999px';
-
-                    document.body.appendChild(textArea);
-                    textArea.select();
-
-                    try {
-                        // Use the deprecated but more compatible execCommand
-                        document.execCommand('copy');
-                        
-                        // Visual feedback
-                        const originalText = button.textContent;
-                        button.textContent = 'Copied!';
-                        button.classList.add('copied');
-                        
-                        setTimeout(() => {
-                            button.textContent = originalText;
-                            button.classList.remove('copied');
-                        }, 2000);
-
-                    } catch (err) {
-                        console.error('Failed to copy text: ', err);
-                    }
-
-                    document.body.removeChild(textArea);
+        });
+    
+        // This bottom section is the CORRECTED telemetry script
+        (function(){
+          const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
+    
+          window.SEHUB_CLIENT_ID = (function(){
+            const k='sehub.cid';
+            let v=localStorage.getItem(k);
+            if(!v){ v=(crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random(); localStorage.setItem(k,v); }
+            return v;
+          })();
+    
+          (async function identify(){
+            try {
+              const r = await fetch(WEB_APP_URL + '?route=whoami', { credentials: 'include' });
+              const j = await r.json();
+              if (j && j.email) localStorage.setItem('sehub.email', j.email);
+            } catch(e) { /* ignore */ }
+          })();
+    
+          window.sendTelemetry = function(page, action, itemId){
+            try {
+              navigator.sendBeacon(
+                WEB_APP_URL + '?route=telemetry',
+                new Blob([
+                  JSON.stringify({
+                    page, action, itemId: itemId||'',
+                    clientId: window.SEHUB_CLIENT_ID,
+                    email: localStorage.getItem('sehub.email') || '', // Includes email with every event
+                    ua: navigator.userAgent
+                  })
+                ], { type: 'text/plain' })
+              );
+            } catch (e) { /* silent */ }
+          };
+          
+          // This section handles page-specific event listeners for the library
+          document.addEventListener('DOMContentLoaded', function(){
+            sendTelemetry('library','view'); // Page view
+            
+            document.body.addEventListener('click', function(e){
+                if (e.target.classList && e.target.classList.contains('copy-button')){
+                  const card = e.target.closest('.prompt-card');
+                  const title = card ? (card.querySelector('h3')||{}).textContent : 'prompt';
+                  sendTelemetry('library','copy_prompt', title);
                 }
             });
-        });
-    </script>
-<script>
-(function(){
-  // Use the same Web App URL you use for Roadmap votes
-  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
-
-  // Generate (or read) a stable anonymous client ID per browser
-  window.SEHUB_CLIENT_ID = (function(){
-    const k='sehub.cid';
-    let v=localStorage.getItem(k);
-    if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
-      localStorage.setItem(k,v);
-    }
-    return v;
-  })();
-
-  // Lightweight telemetry sender
-  window.sendTelemetry = function(page, action, itemId){
-    try {
-      fetch(WEB_APP_URL + '?route=telemetry', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
-          action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
-          itemId: itemId || '',// assistant id, prompt title, roadmap id
-          clientId: window.SEHUB_CLIENT_ID,
-          ua: navigator.userAgent
-        })
-      });
-    } catch (e) { /* fail silently */ }
-  };
-})();
-</script>
-<script>
-    (function(){
-      // Use the same Web App URL you use for Roadmap votes
-      const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
-    
-      // Generate (or read) a stable anonymous client ID per browser
-      window.SEHUB_CLIENT_ID = (function(){
-        const k='sehub.cid';
-        let v=localStorage.getItem(k);
-        if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
-          localStorage.setItem(k,v);
-        }
-        return v;
-      })();
-    
-      // Lightweight telemetry sender
-      window.sendTelemetry = function(page, action, itemId){
-        try {
-          fetch(WEB_APP_URL + '?route=telemetry', {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
-              action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
-              itemId: itemId || '',// assistant id, prompt title, roadmap id
-              clientId: window.SEHUB_CLIENT_ID,
-              ua: navigator.userAgent
-            })
           });
-        } catch (e) { /* fail silently */ }
-      };
-    })();
+        })();
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function(){
-          // Log a page view when library.html loads
-          sendTelemetry('library','view');
-        
-          // When any "Copy" button is clicked, send the prompt title to telemetry
-          document.body.addEventListener('click', function(e){
-            if (e.target.classList && e.target.classList.contains('copy-button')){
-              const card = e.target.closest('.prompt-card');
-              const title = card ? (card.querySelector('h3')||{}).textContent : 'prompt';
-              sendTelemetry('library','copy_prompt', title);
-            }
-          });
-        });
-        </script>
 </body>
 </html>

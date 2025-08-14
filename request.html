@@ -132,23 +132,25 @@
     </footer>
 
     <script>
+        // This top section handles the form logic
         document.addEventListener('DOMContentLoaded', () => {
             const ratingSlider = document.getElementById('impact-rating');
             const ratingValue = document.getElementById('rating-value');
             ratingSlider.addEventListener('input', () => {
                 ratingValue.textContent = ratingSlider.value;
             });
-
+    
             const form = document.getElementById('idea-request-form');
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 
-                // --- Base URL for your form ---
-                const baseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeprHbwmAbF7HjBefCr7HQJ836ZKp917UQCwXDSPcho0ZeSHQ/viewform";
+                // Log the submission event to telemetry
+                const ideaTitle = document.getElementById('idea-title').value;
+                sendTelemetry('request', 'request_submit', ideaTitle);
                 
+                const baseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeprHbwmAbF7HjBefCr7HQJ836ZKp917UQCwXDSPcho0ZeSHQ/viewform";
                 const formData = new FormData(form);
                 const params = new URLSearchParams(formData);
-                
                 const finalUrl = `${baseUrl}?${params.toString()}`;
                 
                 window.open(finalUrl, '_blank');
@@ -158,40 +160,47 @@
                 ratingValue.textContent = '5';
             });
         });
-    </script>
-    <script>
+    
+        // This bottom section is the CORRECTED telemetry script
         (function(){
-          // Use the same Web App URL you use for Roadmap votes
           const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNJ9bxvVMfBpSuk5-EebLFIsKYW44DT-vfaZRSNJ2ZdaokhxOA3wIdzx7USiG-X8-GRw/exec';
-        
-          // Generate (or read) a stable anonymous client ID per browser
+    
           window.SEHUB_CLIENT_ID = (function(){
             const k='sehub.cid';
             let v=localStorage.getItem(k);
-            if(!v){ v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random();
-              localStorage.setItem(k,v);
-            }
+            if(!v){ v=(crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random(); localStorage.setItem(k,v); }
             return v;
           })();
-        
-          // Lightweight telemetry sender
+    
+          (async function identify(){
+            try {
+              const r = await fetch(WEB_APP_URL + '?route=whoami', { credentials: 'include' });
+              const j = await r.json();
+              if (j && j.email) localStorage.setItem('sehub.email', j.email);
+            } catch(e) { /* ignore */ }
+          })();
+    
           window.sendTelemetry = function(page, action, itemId){
             try {
-              fetch(WEB_APP_URL + '?route=telemetry', {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  page: page,          // e.g., 'home', 'library', 'playbook', 'roadmap', 'request'
-                  action: action,      // e.g., 'view', 'launch_assistant', 'copy_prompt', 'vote', 'request_submit'
-                  itemId: itemId || '',// assistant id, prompt title, roadmap id
-                  clientId: window.SEHUB_CLIENT_ID,
-                  ua: navigator.userAgent
-                })
-              });
-            } catch (e) { /* fail silently */ }
+              navigator.sendBeacon(
+                WEB_APP_URL + '?route=telemetry',
+                new Blob([
+                  JSON.stringify({
+                    page, action, itemId: itemId||'',
+                    clientId: window.SEHUB_CLIENT_ID,
+                    email: localStorage.getItem('sehub.email') || '', // Includes email with every event
+                    ua: navigator.userAgent
+                  })
+                ], { type: 'text/plain' })
+              );
+            } catch (e) { /* silent */ }
           };
+    
+          // Send the initial page view
+          document.addEventListener('DOMContentLoaded', function(){
+              sendTelemetry('request','view');
+          });
         })();
-        </script>
+    </script>
 </body>
 </html>
