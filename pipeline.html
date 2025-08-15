@@ -127,16 +127,20 @@
                 saveLocalVote(itemId);
                 renderRoadmap();
     
-                try {
-                    await fetch(WEB_APP_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ item: item.title })
-                    });
-                } catch (error) {
-                    console.error("Error submitting vote:", error);
-                }
+             // In pipeline.html, inside the window.handleVote function
+
+try {
+    const response = await fetch(WEB_APP_URL, { // Note: I added 'const response =' to see the result
+        method: 'POST',
+        // mode: 'no-cors', // This line has been removed
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ item: item.title })
+    });
+    const result = await response.json(); // You can now see the server's response
+    console.log('Vote submitted successfully:', result);
+} catch (error) {
+    console.error("Error submitting vote:", error);
+}
             }
     
             function renderRoadmap() {
